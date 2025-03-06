@@ -8,7 +8,8 @@ using Entities.IUOW;
 using Microsoft.EntityFrameworkCore;
 using Repositories.DB;
 
-namespace Repositories.DB;
+namespace Repositories.DB
+{
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         internal ApplicationDbContext _context;
@@ -57,5 +58,4 @@ namespace Repositories.DB;
             return Task.FromResult(_dbSet.Update(entity));
         }
     }
-
 }

@@ -1,8 +1,10 @@
 ﻿using Repositories.Entities.Base;
+using System.ComponentModel.DataAnnotations;
 namespace Repositories.Entities
 {
     public class Feedback : BaseEntity
     {
+        [Key]
         public Guid FeedbackID { get; set; }
         public string content {  get; set; }
         public Guid accountID { get; set; }

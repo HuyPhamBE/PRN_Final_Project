@@ -1,8 +1,10 @@
 ﻿using Repositories.Entities.Base;
+using System.ComponentModel.DataAnnotations;
 namespace Repositories.Entities
 {
     public class Service : BaseEntity
     {
+        [Key]
         public Guid ServiceID { get; set; }
         public string serviceName {  get; set; }
         public string description {  get; set; }

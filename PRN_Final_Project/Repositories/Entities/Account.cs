@@ -1,8 +1,10 @@
 ﻿using Repositories.Entities.Base;
+using System.ComponentModel.DataAnnotations;
 namespace Repositories.Entities
 {
     public class Account : BaseEntity
     {
+        [Key]
         public Guid accountID { get; set; }
         public string userName {  get; set; }
         public string password { get; set; }

@@ -27,6 +27,18 @@ namespace Repositories.DB
         public virtual DbSet<TherapyResult> TherapyResults => Set<TherapyResult>();
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Booking>()
+                .HasOne(b => b.Therapist)
+                .WithMany(t => t.Bookings)
+                .HasForeignKey(b => b.theraID)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Payment>()
+               .HasOne(p => p.Customer)
+               .WithMany(c => c.Payment)
+               .HasForeignKey(p => p.cusID)
+               .OnDelete(DeleteBehavior.Restrict);
+            // Configure other relationships as needed.
+
             base.OnModelCreating(modelBuilder);
         }
     }

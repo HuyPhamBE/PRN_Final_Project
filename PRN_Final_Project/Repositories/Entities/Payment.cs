@@ -1,8 +1,10 @@
 ﻿using Repositories.Entities.Base;
+using System.ComponentModel.DataAnnotations;
 namespace Repositories.Entities
 {
     public class Payment
     {
+        [Key]
         public Guid paymentID { get; set; }
         public decimal amount { get; set; }
         public string orderInfo { get; set; }

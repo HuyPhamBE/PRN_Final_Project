@@ -1,8 +1,10 @@
 ﻿using Repositories.Entities.Base;
+using System.ComponentModel.DataAnnotations;
 namespace Repositories.Entities
 {
     public class Therapist : BaseEntity
     {
+        [Key]
         public Guid theraID { get; set; }
         public string fullName {  get; set; }
         public bool gender {  get; set; }
