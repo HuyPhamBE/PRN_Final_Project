@@ -1,4 +1,10 @@
+using Entities.IUOW;
+using Microsoft.AspNetCore.Identity;
 using PRN_Assignment;
+using Repositories.DB;
+using Repositories.Entities;
+using Services.Interface;
+using Services.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -8,6 +14,13 @@ builder.Configuration
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddEnvironmentVariables();
 builder.Services.AddRazorPages();
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IPasswordHasher<Account>, PasswordHasher<Account>>();
+
+// Add session
+builder.Services.AddSession();  
 
 var app = builder.Build();
 
@@ -23,6 +36,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+// Use session
+app.UseSession();
 
 app.UseAuthorization();
 
