@@ -12,7 +12,7 @@ using Repositories.DB;
 namespace Repositories.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250306082501_Initial")]
+    [Migration("20250308114422_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -102,9 +102,6 @@ namespace Repositories.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CustomercusID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("appointmentDay")
                         .HasColumnType("datetime2");
 
@@ -127,7 +124,7 @@ namespace Repositories.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("theraID")
+                    b.Property<Guid?>("theraID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("total")
@@ -138,7 +135,7 @@ namespace Repositories.Migrations
 
                     b.HasKey("BookingID");
 
-                    b.HasIndex("CustomercusID");
+                    b.HasIndex("cusID");
 
                     b.HasIndex("serviceID");
 
@@ -360,9 +357,6 @@ namespace Repositories.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("typeID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTimeOffset>("updatedAt")
                         .HasColumnType("datetimeoffset");
 
@@ -519,8 +513,8 @@ namespace Repositories.Migrations
                 {
                     b.HasOne("Repositories.Entities.Customer", "Customer")
                         .WithMany("Bookings")
-                        .HasForeignKey("CustomercusID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("cusID")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Repositories.Entities.Service", "Service")
@@ -538,8 +532,7 @@ namespace Repositories.Migrations
                     b.HasOne("Repositories.Entities.Therapist", "Therapist")
                         .WithMany("Bookings")
                         .HasForeignKey("theraID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Customer");
 
@@ -624,7 +617,7 @@ namespace Repositories.Migrations
             modelBuilder.Entity("Repositories.Entities.Service", b =>
                 {
                     b.HasOne("Repositories.Entities.ServiceType", "ServiceType")
-                        .WithMany()
+                        .WithMany("Services")
                         .HasForeignKey("ServiceTypeID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -684,6 +677,11 @@ namespace Repositories.Migrations
                     b.Navigation("Bookings");
 
                     b.Navigation("Feedbacks");
+                });
+
+            modelBuilder.Entity("Repositories.Entities.ServiceType", b =>
+                {
+                    b.Navigation("Services");
                 });
 
             modelBuilder.Entity("Repositories.Entities.Slot", b =>

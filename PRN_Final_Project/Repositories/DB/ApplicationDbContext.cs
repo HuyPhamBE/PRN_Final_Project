@@ -38,7 +38,11 @@ namespace Repositories.DB
                .HasForeignKey(p => p.cusID)
                .OnDelete(DeleteBehavior.Restrict);
             // Configure other relationships as needed.
-
+            modelBuilder.Entity<Booking>()
+                .HasOne(b=>b.Customer)
+                .WithMany(t=>t.Bookings)
+                .HasForeignKey(b=>b.cusID)
+                .OnDelete(DeleteBehavior.Restrict);
             base.OnModelCreating(modelBuilder);
         }
     }

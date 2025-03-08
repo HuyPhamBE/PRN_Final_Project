@@ -170,7 +170,6 @@ namespace Repositories.Migrations
                     maxRage = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    typeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ServiceTypeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     createdAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     updatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
@@ -219,9 +218,8 @@ namespace Repositories.Migrations
                     deposit = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     serviceID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     slotID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    theraID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    theraID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     cusID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CustomercusID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     createdAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     updatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
@@ -229,11 +227,11 @@ namespace Repositories.Migrations
                 {
                     table.PrimaryKey("PK_Bookings", x => x.BookingID);
                     table.ForeignKey(
-                        name: "FK_Bookings_Customers_CustomercusID",
-                        column: x => x.CustomercusID,
+                        name: "FK_Bookings_Customers_cusID",
+                        column: x => x.cusID,
                         principalTable: "Customers",
                         principalColumn: "cusID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Bookings_Services_serviceID",
                         column: x => x.serviceID,
@@ -342,9 +340,9 @@ namespace Repositories.Migrations
                 column: "accountID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bookings_CustomercusID",
+                name: "IX_Bookings_cusID",
                 table: "Bookings",
-                column: "CustomercusID");
+                column: "cusID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bookings_serviceID",
