@@ -5,6 +5,7 @@ using Repositories.DB;
 using Repositories.Entities;
 using Services.Interface;
 using Services.Services;
+using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -18,7 +19,9 @@ builder.Services.AddRazorPages();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IPasswordHasher<Account>, PasswordHasher<Account>>();
-
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddAutoMapper((Assembly[])AppDomain.CurrentDomain.GetAssemblies());
 // Add session
 builder.Services.AddSession();  
 

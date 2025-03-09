@@ -1,0 +1,88 @@
+﻿@page
+@model PRN_Final_Project.Pages.CustomerManage.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer[0].cusID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer[0].fullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer[0].phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer[0].address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer[0].dob)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer[0].gender)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer[0].imageUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer[0].Account)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer[0].createdAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer[0].updatedAt)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Customer) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.fullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.dob)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.gender)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.imageUrl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Account.email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.createdAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.updatedAt)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.cusID">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.cusID">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.cusID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
