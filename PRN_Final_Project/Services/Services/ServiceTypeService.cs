@@ -1,5 +1,5 @@
-﻿using Repositories.Model.Feedback;
-using Services.Interface;
+﻿using Repositories.Model.ServiceType;
+using ServiceTypes.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,29 +8,29 @@ using System.Threading.Tasks;
 
 namespace Services.Services
 {
-    public class FeedbackService : IFeedbackService
+    public class ServiceTypeService : IServiceTypeService
     {
-        public Task CreateFeedback(CreateFeedbackModel model)
+        public Task CreateServiceType(CreateServiceTypeModel model)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteFeedback(string id)
+        public Task DeleteServiceType(string id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IList<FeedbackServiceModel>> GetFeedbackAsync()
+        public Task<IList<ServiceTypeServiceModel>> GetServiceTypeAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<FeedbackServiceModel> GetFeedbackAsyncById(string id)
+        public Task<ServiceTypeServiceModel> GetServiceTypeAsyncById(string id)
         {
             throw new NotImplementedException();
         }
 
-        public Task UpdateFeedback(UpdateFeedbackModel model, string id)
+        public Task UpdateServiceType(UpdateServiceTypeModel model, string id)
         {
             throw new NotImplementedException();
         }
