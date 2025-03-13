@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Repositories.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,12 @@ namespace Services.Interface
 {
     public interface ICustomerService
     {
+        Task<Customer> GetCustomerByUserId(Guid id);
+
+        Task<IEnumerable<Customer>> GetAllCustomerAsync();
+
+        Task<int> GetTotalCustomers();
+
+
     }
 }

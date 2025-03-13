@@ -1,0 +1,152 @@
+﻿@page
+@model PRN_Final_Project.Pages.DashboardAndReport.DashboardAndReportModel
+@{
+    ViewData["Title"] = "Admin Dashboard & Report";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Sidebar -->
+    <div class="flex">
+        <aside class="w-64 bg-blue-800 h-screen text-white p-6">
+            <h2 class="text-2xl font-bold mb-4">Admin Dashboard</h2>
+            <ul>
+                <li class="mb-2"><a href="#" class="block p-2 hover:bg-blue-700">Overview</a></li>
+                <li class="mb-2"><a href="#" class="block p-2 hover:bg-blue-700">Bookings</a></li>
+                <li class="mb-2"><a href="#" class="block p-2 hover:bg-blue-700">Therapists</a></li>
+                <li class="mb-2"><a href="#" class="block p-2 hover:bg-blue-700">Reports</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6">
+            <h1 class="text-3xl font-semibold text-gray-800">Service Dashboard</h1>
+
+            <!-- Summary Cards -->
+            <div class="grid grid-cols-4 gap-6 mt-6">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-gray-700">Total Customers</h3>
+                    <p class="text-2xl text-blue-600 font-bold">@Model.TotalCustomers</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-gray-700">Total Bookings</h3>
+                    <p class="text-2xl text-green-600 font-bold">@Model.TotalBookings</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-gray-700">Active Therapists</h3>
+                    <p class="text-2xl text-purple-600 font-bold">@Model.ActiveTherapists</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-gray-700">Total Revenue</h3>
+                    <p class="text-2xl text-red-600 font-bold">$@Model.TotalRevenue</p>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-2 gap-6 mt-6">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-gray-700 mb-4">Bookings Trend</h3>
+                    <canvas id="bookingsChart"></canvas>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-gray-700 mb-4">Customer Ratings</h3>
+                    <canvas id="ratingsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Bookings & Feedback -->
+            <div class="grid grid-cols-2 gap-6 mt-6">
+                <!-- Recent Bookings -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-gray-700 mb-4">Recent Bookings</h3>
+                    <table class="w-full border-collapse border border-gray-200">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="text-left text-gray-600 p-2 border border-gray-200">Customer</th>
+                                <th class="text-left text-gray-600 p-2 border border-gray-200">Service</th>
+                                <th class="text-left text-gray-600 p-2 border border-gray-200">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var booking in Model.RecentBookings)
+                            {
+                                <tr class="border border-gray-200">
+                                    <td class="p-2">@booking.CustomerName</td>
+                                    <td class="p-2">@booking.ServiceName</td>
+                                    <td class="p-2">@booking.Date.ToShortDateString()</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Customer Feedback -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-gray-700 mb-4">Customer Feedback</h3>
+                    <table class="w-full border-collapse border border-gray-200">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="text-left text-gray-600 p-2 border border-gray-200">Customer</th>
+                                <th class="text-left text-gray-600 p-2 border border-gray-200">Service</th>
+                                <th class="text-left text-gray-600 p-2 border border-gray-200">Comment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var feedback in Model.CustomerFeedbacks)
+                            {
+                                <tr class="border border-gray-200">
+                                    <td class="p-2">@feedback.CustomerName</td>
+                                    <td class="p-2">@feedback.ServiceName</td>
+                                    <td class="p-2">@feedback.content</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Bookings Chart
+        const ctx1 = document.getElementById('bookingsChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.BookingMonths)),
+                datasets: [{
+                    label: 'Bookings',
+                    data: @Html.Raw(Json.Serialize(Model.BookingCounts)),
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 2
+                }]
+            }
+        });
+
+        // Ratings Chart
+        const ctx2 = document.getElementById('ratingsChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['1⭐', '2⭐', '3⭐', '4⭐', '5⭐'],
+                datasets: [{
+                    label: 'Ratings',
+                    data: @Html.Raw(Json.Serialize(Model.RatingCounts)),
+                    backgroundColor: ['red', 'orange', 'yellow', 'green', 'blue']
+                }]
+            }
+        });
+    </script>
+
+</body>
+</html>
