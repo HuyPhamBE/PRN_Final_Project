@@ -1,0 +1,73 @@
+﻿@page
+@model PRN_Final_Project.Pages.TherapistPage.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Therapist</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Therapist.fullName" class="control-label"></label>
+                <input asp-for="Therapist.fullName" class="form-control" />
+                <span asp-validation-for="Therapist.fullName" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Therapist.gender" /> @Html.DisplayNameFor(model => model.Therapist.gender)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Therapist.major" class="control-label"></label>
+                <input asp-for="Therapist.major" class="form-control" />
+                <span asp-validation-for="Therapist.major" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Therapist.imageUrl" class="control-label"></label>
+                <input asp-for="Therapist.imageUrl" class="form-control" />
+                <span asp-validation-for="Therapist.imageUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Therapist.exp" class="control-label"></label>
+                <input asp-for="Therapist.exp" class="form-control" />
+                <span asp-validation-for="Therapist.exp" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Therapist.status" class="control-label"></label>
+                <input asp-for="Therapist.status" class="form-control" />
+                <span asp-validation-for="Therapist.status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Therapist.accountID" class="control-label"></label>
+                <select asp-for="Therapist.accountID" class ="form-control" asp-items="ViewBag.accountID"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Therapist.createdAt" class="control-label"></label>
+                <input asp-for="Therapist.createdAt" class="form-control" />
+                <span asp-validation-for="Therapist.createdAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Therapist.updatedAt" class="control-label"></label>
+                <input asp-for="Therapist.updatedAt" class="form-control" />
+                <span asp-validation-for="Therapist.updatedAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

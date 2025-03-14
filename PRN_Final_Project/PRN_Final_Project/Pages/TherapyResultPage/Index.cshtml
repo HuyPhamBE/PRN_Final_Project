@@ -1,0 +1,59 @@
+﻿@page
+@model PRN_Final_Project.Pages.TherapyResultPage.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TherapyResult[0].status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TherapyResult[0].content)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TherapyResult[0].Booking)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TherapyResult[0].createdAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TherapyResult[0].updatedAt)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.TherapyResult) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.content)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Booking.BookingID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.createdAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.updatedAt)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.theraResultID">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.theraResultID">Details</a> |
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,94 @@
+﻿@page
+@model PRN_Final_Project.Pages.TherapistPage.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Therapists</h1>
+
+<!-- Search Form -->
+<form method="get">
+    <div class="input-group mb-3">
+        <input type="text" name="searchTerm" class="form-control" placeholder="Search by name..." value="@Model.SearchTerm" />
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+</form>
+
+<p>
+    <a asp-page="Create" class="btn btn-primary">Create New</a>
+    <a asp-page="./Schedule" class="btn btn-primary">Schedules</a>
+</p>
+
+<!-- Bootstrap Modal for Success or Failure Message -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="messageModalLabel">Notification</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @if (!string.IsNullOrEmpty(TempData["Message"] as string))
+                {
+                    <p>@Html.Raw(TempData["Message"])</p>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var message = "@TempData["Message"]";
+            if (message && message.trim() !== "") {
+                var modal = new bootstrap.Modal(document.getElementById('messageModal'));
+                modal.show();
+            }
+        });
+    </script>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Full Name</th>
+            <th>Gender</th>
+            <th>Major</th>
+            <th>Image</th>
+            <th>Experience</th>
+            <th>Status</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Therapist)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.fullName)</td>
+                <td>@Html.DisplayFor(modelItem => item.gender)</td>
+                <td>@Html.DisplayFor(modelItem => item.major)</td>
+                <td><img src="@item.imageUrl" alt="Therapist Image" style="width:50px; height:50px;" /></td>
+                <td>@Html.DisplayFor(modelItem => item.exp) years</td>
+                <td>@Html.DisplayFor(modelItem => item.status)</td>
+                <td>@Html.DisplayFor(modelItem => item.Account.email)</td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.theraID" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-page="./Details" asp-route-id="@item.theraID" class="btn btn-info btn-sm">Details</a>
+                    <form method="post" asp-page="./Delete" asp-route-id="@item.theraID" style="display:inline;">
+                        <button type="submit" class="btn @(item.status == "Deleted" ? "btn-success" : "btn-danger") btn-sm">
+                            @(item.status == "Deleted" ? "Restore" : "Delete")
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

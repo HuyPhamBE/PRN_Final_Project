@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Repositories.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,8 @@ namespace Services.Interface
 {
     public interface IBookingService
     {
+        Task<IList<Booking>> GetByTherapistId(Guid therapistId);
+
+        Task<Booking?> GetById(Guid id);
     }
 }
