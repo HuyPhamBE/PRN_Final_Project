@@ -1,4 +1,3 @@
-﻿using Repositories.Model.Blog;
 ﻿using Repositories.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,13 +9,18 @@ namespace Services.Interface
 {
     public interface IBookingService
     {
-        Task<BookingServiceModel> GetBookingAsyncById(string id);
-        Task<IList<BookingServiceModel>> GetBookingAsync();
-        Task CreateBooking(CreateBookingModel model);
-        Task DeleteBooking(string id);
-        Task UpdateBooking(UpdateBookingModel model, string id);
-        Task<IList<Booking>> GetByTherapistId(Guid therapistId);
+        Task<IEnumerable<Booking>> GetAllBookingCompleteAsync();
 
-        Task<Booking?> GetById(Guid id);
+        Task<IEnumerable<Booking>> GetBookingsByCusIdAsync(Guid cusId);
+
+        Task<int> GetBookingsCountAsync();
+
+        Task<IEnumerable<Booking>> GetRecentBookings(int count);
+
+        Task<Dictionary<string, int>> GetBookingTrends();
+
+        Task<Dictionary<string, decimal>> GetMonthlyRevenue();
+
+        Task<Decimal> getTotalRevenue();
     }
 }

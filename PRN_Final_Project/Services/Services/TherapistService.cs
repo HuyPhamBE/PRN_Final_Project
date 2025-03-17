@@ -134,6 +134,39 @@ namespace Services.Services
                 throw new ApplicationException("An error occurred while retrieving therapists.", ex);
             }
 
+        public Task<Therapist> CreateTherapistAsync(Therapist therapist)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> DeleteTherapistAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<Therapist>> GetAllTherapistsAsync()
+        {
+            return await _unitOfWork.GetRepository<Therapist>().Entities.ToListAsync();
+        }
+
+        public async Task<int> GetCountActiveTherapist()
+        {
+           return await _unitOfWork.GetRepository<Therapist>().Entities.Where(x => x.status == "active").CountAsync();
+        }
+
+        public Task<Therapist> GetTherapistByTheraIdAsync(Guid theraId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> UpdateStatusActiveTheraAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Therapist> UpdateTherapistAsync(Guid theraId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

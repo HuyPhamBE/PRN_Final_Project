@@ -9,16 +9,18 @@ namespace Services.Interface
 {
     public interface ITherapistService
     {
-        Task<IList<Therapist>> GetAll();
+        Task<IEnumerable<Therapist>> GetAllTherapistsAsync();
 
-        Task<Therapist> GetTherapistById(Guid theraID);
+        Task<int> GetCountActiveTherapist();
 
-        Task AddNewTherapist(Therapist therapist);
+        Task<Therapist> CreateTherapistAsync(Therapist therapist);
 
-        Task UpdateTherapist(Therapist therapist);
+        Task<Therapist> UpdateTherapistAsync(Guid theraId);
 
-        Task ToggleTherapistStatus(Guid id);  // soft delete
-        Task<IList<Therapist>> SearchByName(string fullName);
+        Task<Therapist> GetTherapistByTheraIdAsync(Guid theraId);
 
+        Task<bool> DeleteTherapistAsync(int id);
+
+        Task<bool> UpdateStatusActiveTheraAsync(int id);
     }
 }

@@ -1,4 +1,4 @@
-﻿using Repositories.Model.Rating;
+﻿using Repositories.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +9,14 @@ namespace Services.Interface
 {
     public interface IRatingService
     {
-        Task<RatingServiceModel> GetRatingAsyncById(string id);
-        Task<IList<RatingServiceModel>> GetRatingAsync();
-        Task CreateRating(CreateRatingModel model);
-        Task DeleteRating(string id);
-        Task UpdateRating(UpdateRatingModel model, string id);
+        Task<IEnumerable<Rating>> GetAllRatingsAsync();
+        Task<Rating?> GetRatingByIdAsync(Guid rateID);
+        Task<IEnumerable<Rating>> GetRatingsByTherapistIdAsync(Guid theraID);
+
+        Task<double> GetAverageRatingByTherapistIdAsync(Guid theraID);
+
+        Task AddRatingAsync(Rating rating);
+
+        Task<Dictionary<byte, int>> GetRatingCountsAsync();
     }
 }

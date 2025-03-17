@@ -77,6 +77,9 @@ namespace Services.Services
             {
                 throw new ApplicationException("An error occurred while retrieving therapists.", ex);
             }
+        public Task<Account> getAccountByCusId(Guid cusId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

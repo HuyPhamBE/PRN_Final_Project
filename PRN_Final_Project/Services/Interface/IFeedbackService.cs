@@ -1,4 +1,4 @@
-﻿using Repositories.Model.Feedback;
+﻿using Repositories.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +9,22 @@ namespace Services.Interface
 {
     public interface IFeedbackService
     {
-        Task<FeedbackServiceModel> GetFeedbackAsyncById(string id);
-        Task<IList<FeedbackServiceModel>> GetFeedbackAsync();
-        Task CreateFeedback(CreateFeedbackModel model);
-        Task DeleteFeedback(string id);
-        Task UpdateFeedback(UpdateFeedbackModel model, string id);
+        // Get all feedback
+        Task<IEnumerable<Feedback>> GetAllFeedbackAsync();
+
+        // Get feedback by ID
+        Task<Feedback?> GetFeedbackByIdAsync(Guid feedbackId);
+
+        // Get feedback by account ID
+        Task<IEnumerable<Feedback>> GetFeedbackByAccountIdAsync(Guid accountId);
+
+        // Get feedback related to a specific service
+        Task<IEnumerable<Feedback>> GetFeedbackByServiceIdAsync(Guid serviceId);
+
+        // Get feedback by booking ID (indirectly using service ID)
+        Task<IEnumerable<Feedback>> GetFeedbackByBookingIdAsync(Guid bookingId);
+
+        // Get recent feedback 
+        Task<IEnumerable<Feedback>> GetRecentFeedbackAsync(int count);
     }
 }

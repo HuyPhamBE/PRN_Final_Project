@@ -1,4 +1,8 @@
 ﻿using Repositories.Model.Feedback;
+﻿using Entities.IUOW;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
+using Repositories.Entities;
 using Services.Interface;
 using System;
 using System.Collections.Generic;
@@ -10,29 +14,48 @@ namespace Services.Services
 {
     public class FeedbackService : IFeedbackService
     {
-        public Task CreateFeedback(CreateFeedbackModel model)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public FeedbackService(IUnitOfWork unitOfWork)
         {
-            throw new NotImplementedException();
+            _unitOfWork = unitOfWork;
         }
 
-        public Task DeleteFeedback(string id)
+        public async Task<IEnumerable<Feedback>> GetAllFeedbackAsync()
         {
-            throw new NotImplementedException();
+            return await _unitOfWork.GetRepository<Feedback>().GetAllAsync();
         }
 
-        public Task<IList<FeedbackServiceModel>> GetFeedbackAsync()
+        public async Task<IEnumerable<Feedback>> GetFeedbackByAccountIdAsync(Guid accountId)
         {
-            throw new NotImplementedException();
+            return await _unitOfWork.GetRepository<Feedback>().Entities.Where(r => r.accountID == accountId).ToListAsync();
         }
 
-        public Task<FeedbackServiceModel> GetFeedbackAsyncById(string id)
+        public async Task<IEnumerable<Feedback>> GetFeedbackByBookingIdAsync(Guid bookingId)
         {
-            throw new NotImplementedException();
+            var booking = await _unitOfWork.GetRepository<Booking>().GetByIdAsync(bookingId);
+
+            if (booking != null)
+            {
+                var customer =  await _unitOfWork.GetRepository<Customer>().Entities.Where(x => x.cusID == booking.cusID).FirstOrDefaultAsync();
+
+                return await _unitOfWork.GetRepository<Feedback>().Entities.Where(r => r.serviceID == booking.serviceID && r.accountID == customer.accountID).Include(f => f.Service).ToListAsync();
+            }
+            return await _unitOfWork.GetRepository<Feedback>().GetAllAsync();
+        }
+        public async Task<Feedback?> GetFeedbackByIdAsync(Guid feedbackId)
+        {
+            return await _unitOfWork.GetRepository<Feedback>().GetByIdAsync(feedbackId);
         }
 
-        public Task UpdateFeedback(UpdateFeedbackModel model, string id)
+        public async Task<IEnumerable<Feedback>> GetFeedbackByServiceIdAsync(Guid serviceId)
         {
-            throw new NotImplementedException();
+            return await _unitOfWork.GetRepository<Feedback>().Entities.Where(r => r.serviceID == serviceId).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Feedback>> GetRecentFeedbackAsync(int count)
+        {
+            return await _unitOfWork.GetRepository<Feedback>().Entities.OrderByDescending(r => r.createdAt).Take(count).Include(a => a.Account).Include(s => s.Service).ToListAsync();
         }
     }
 }

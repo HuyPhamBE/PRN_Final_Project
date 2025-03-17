@@ -1,4 +1,7 @@
 ﻿using Repositories.Model.Rating;
+﻿using Entities.IUOW;
+using Microsoft.EntityFrameworkCore;
+using Repositories.Entities;
 using Services.Interface;
 using System;
 using System.Collections.Generic;
@@ -10,29 +13,56 @@ namespace Services.Services
 {
     public class RatingService : IRatingService
     {
-        public Task CreateRating(CreateRatingModel model)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public RatingService(IUnitOfWork unitOfWork)
         {
-            throw new NotImplementedException();
+            _unitOfWork = unitOfWork;
         }
 
-        public Task DeleteRating(string id)
+        public async Task AddRatingAsync(Rating rating)
         {
-            throw new NotImplementedException();
+            await _unitOfWork.GetRepository<Rating>().InsertAsync(rating);
+            await _unitOfWork.SaveAsync();
         }
 
-        public Task<IList<RatingServiceModel>> GetRatingAsync()
+        public async Task<IEnumerable<Rating>> GetAllRatingsAsync()
         {
-            throw new NotImplementedException();
+            return await _unitOfWork.GetRepository<Rating>().GetAllAsync();
         }
 
-        public Task<RatingServiceModel> GetRatingAsyncById(string id)
+        public async Task<double> GetAverageRatingByTherapistIdAsync(Guid theraID)
         {
-            throw new NotImplementedException();
+            var ratings = await _unitOfWork.GetRepository<Rating>()
+        .Entities.Where(r => r.theraID == theraID)
+        .Select(r => (double)r.rates) 
+        .ToListAsync();
+
+            if (!ratings.Any())
+                return 0;
+
+            return ratings.Average();
         }
 
-        public Task UpdateRating(UpdateRatingModel model, string id)
+        public async Task<Rating?> GetRatingByIdAsync(Guid rateID)
         {
-            throw new NotImplementedException();
+            return await _unitOfWork.GetRepository<Rating>().GetByIdAsync(rateID);
+        }
+
+        public async Task<Dictionary<byte, int>> GetRatingCountsAsync()
+        {
+            return await _unitOfWork.GetRepository<Rating>().Entities
+                         .GroupBy(r => r.rates)
+                         .Select(g => new { Rating = g.Key, Count = g.Count() })
+                         .ToListAsync() 
+                         .ContinueWith(task => task.Result.ToDictionary(g => g.Rating, g => g.Count));
+        }
+
+        public async Task<IEnumerable<Rating>> GetRatingsByTherapistIdAsync(Guid theraID)
+        {
+            return await _unitOfWork.GetRepository<Rating>().Entities
+               .Where(r => r.theraID == theraID)
+               .ToListAsync();
         }
     }
 }
