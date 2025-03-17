@@ -1,4 +1,4 @@
-﻿using Repositories.Model.Therapist;
+﻿using Repositories.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +9,16 @@ namespace Services.Interface
 {
     public interface ITherapistService
     {
-        Task<TherapistServiceModel> GetTherapistAsyncById(string id);
-        Task<IList<TherapistServiceModel>> GetTherapistAsync();
-        Task CreateTherapist(CreateTherapistModel model);
-        Task DeleteTherapist(string id);
-        Task UpdateTherapist(UpdateTherapistModel model, string id);
+        Task<IList<Therapist>> GetAll();
+
+        Task<Therapist> GetTherapistById(Guid theraID);
+
+        Task AddNewTherapist(Therapist therapist);
+
+        Task UpdateTherapist(Therapist therapist);
+
+        Task ToggleTherapistStatus(Guid id);  // soft delete
+        Task<IList<Therapist>> SearchByName(string fullName);
+
     }
 }

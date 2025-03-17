@@ -1,4 +1,5 @@
 ﻿using Repositories.Model.Blog;
+﻿using Repositories.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,8 @@ namespace Services.Interface
         Task CreateBooking(CreateBookingModel model);
         Task DeleteBooking(string id);
         Task UpdateBooking(UpdateBookingModel model, string id);
+        Task<IList<Booking>> GetByTherapistId(Guid therapistId);
+
+        Task<Booking?> GetById(Guid id);
     }
 }

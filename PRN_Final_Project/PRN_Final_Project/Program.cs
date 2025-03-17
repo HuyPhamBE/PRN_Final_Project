@@ -24,6 +24,9 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper((Assembly[])AppDomain.CurrentDomain.GetAssemblies());
 // Add session
 builder.Services.AddSession();  
+builder.Services.AddScoped<ITherapistService, TherapistService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddScoped<ITherapistResultService, TherapistResultService>();
 
 var app = builder.Build();
 

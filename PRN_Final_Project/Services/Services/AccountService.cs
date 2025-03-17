@@ -55,6 +55,28 @@ namespace Services.Services
             var result = _passwordHasher.VerifyHashedPassword(user, user.password, password);
 
             return result == PasswordVerificationResult.Success ? user : null;
+
+        private readonly IUnitOfWork _unitOfWork;
+
+        public AccountService(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+
+        public async Task<IList<Account>> GetAllAccount()
+        {
+            try
+            {
+                var repository = _unitOfWork.GetRepository<Account>();
+
+                return await repository.Entities
+                    .Where(t => t.status == "active")
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("An error occurred while retrieving therapists.", ex);
+            }
         }
     }
 }

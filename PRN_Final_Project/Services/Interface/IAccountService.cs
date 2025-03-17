@@ -12,5 +12,6 @@ namespace Services.Interface
         Task<Account> Login(string username, string password);
 
         Task<Account> register(Account account, Customer customer);
+        public Task<IList<Account>> GetAllAccount();
     }
 }

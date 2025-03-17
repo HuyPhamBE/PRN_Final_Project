@@ -1,0 +1,61 @@
+﻿@page
+@model PRN_Final_Project.Pages.TherapistPage.DetailsModel
+
+@{
+    ViewData["Title"] = "Therapist Details";
+}
+
+<h1>Therapist Details</h1>
+
+<div>
+    <h4>Therapist Information</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Full Name</dt>
+        <dd class="col-sm-10">@Model.Therapist.fullName</dd>
+
+        <dt class="col-sm-2">Gender</dt>
+        <dd class="col-sm-10">@(Model.Therapist.gender ? "Male" : "Female")</dd>
+
+        <dt class="col-sm-2">Major</dt>
+        <dd class="col-sm-10">@Model.Therapist.major</dd>
+
+        <dt class="col-sm-2">Profile Image</dt>
+        <dd class="col-sm-10">
+            @if (!string.IsNullOrEmpty(Model.Therapist.imageUrl))
+            {
+                <img src="@Model.Therapist.imageUrl" alt="Therapist Image" style="max-width: 150px; border-radius: 10px;" />
+            }
+            else
+            {
+                <span>No Image Available</span>
+            }
+        </dd>
+
+        <dt class="col-sm-2">Experience (Years)</dt>
+        <dd class="col-sm-10">@Model.Therapist.exp years</dd>
+
+        <dt class="col-sm-2">Status</dt>
+        <dd class="col-sm-10">
+            @(Model.Therapist.status?.ToLower() == "active" ? "Active" : "Inactive")
+        </dd>
+
+        <dt class="col-sm-2">Email</dt>
+        <dd class="col-sm-10">@Model.Therapist.Account.email</dd>
+
+        <dt class="col-sm-2">Created At</dt>
+        <dd class="col-sm-10">
+            @Model.Therapist.createdAt.ToString("yyyy-MM-dd HH:mm:ss")
+        </dd>
+
+        <dt class="col-sm-2">Last Updated</dt>
+        <dd class="col-sm-10">
+            @Model.Therapist.updatedAt.ToString("yyyy-MM-dd HH:mm:ss")
+        </dd>
+    </dl>
+</div>
+
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Therapist.theraID" class="btn btn-primary">Edit</a>
+    <a asp-page="./Index" class="btn btn-secondary">Back to List</a>
+</div>

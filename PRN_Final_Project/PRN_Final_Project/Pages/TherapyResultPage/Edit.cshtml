@@ -1,0 +1,85 @@
+﻿@page
+@model PRN_Final_Project.Pages.TherapyResultPage.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>TherapyResult</h4>
+<hr />
+<!-- Bootstrap Modal for Success or Failure Message -->
+<div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="messageModalLabel">Notification</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @if (!string.IsNullOrEmpty(ViewData["Message"] as string))
+                {
+                    <p>@ViewData["Message"]</p>
+                }
+                else if (!string.IsNullOrEmpty(TempData["Message"] as string))
+                {
+                    <p>@Html.Raw(TempData["Message"])</p>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close-modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="TherapyResult.theraResultID" />
+            <div class="form-group">
+                <label asp-for="TherapyResult.status" class="control-label"></label>
+                <input asp-for="TherapyResult.status" class="form-control" />
+                <span asp-validation-for="TherapyResult.status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TherapyResult.content" class="control-label"></label>
+                <input asp-for="TherapyResult.content" class="form-control" />
+                <span asp-validation-for="TherapyResult.content" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script>
+        $(document).ready(function () {
+            var message = "@ViewData["Message"]" || "@TempData["Message"]";
+            message = message.trim();
+
+            if (message !== "" && message !== "undefined") {
+                $('#messageModal').modal('show');
+            }
+
+            $('.close-modal').click(function () {
+                $('#messageModal').modal('hide');
+            });
+
+            $('.close').click(function () {
+                $('#messageModal').modal('hide');
+            });
+        });
+    </script>
+}
