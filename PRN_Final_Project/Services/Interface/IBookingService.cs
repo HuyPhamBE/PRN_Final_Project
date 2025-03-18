@@ -18,9 +18,9 @@ namespace Services.Interface
         Task<IEnumerable<Booking>> GetRecentBookings(int count);
 
         Task<Dictionary<string, int>> GetBookingTrends();
-
+        Task<IList<Booking>> GetByTherapistId(Guid therapistId);
         Task<Dictionary<string, decimal>> GetMonthlyRevenue();
-
+        Task<Booking?> GetById(Guid id);
         Task<Decimal> getTotalRevenue();
     }
 }

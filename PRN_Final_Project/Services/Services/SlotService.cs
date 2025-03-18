@@ -1,4 +1,7 @@
-﻿using Repositories.Model.Slot;
+﻿using AutoMapper;
+using Entities.IUOW;
+using Repositories.Entities;
+using Repositories.Model.Slot;
 using Services.Interface;
 using System;
 using System.Collections.Generic;
@@ -10,29 +13,45 @@ namespace Services.Services
 {
     public class SlotService : ISlotService
     {
-        public Task CreateSlot(CreateSlotModel model)
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IMapper mapper;
+
+        public SlotService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            throw new NotImplementedException();
+            this.unitOfWork = unitOfWork;
+            this.mapper = mapper;
         }
 
-        public Task DeleteSlot(string id)
+        public async Task CreateSlot(CreateSlotModel model)
         {
-            throw new NotImplementedException();
+            Slot slot = mapper.Map<Slot>(model);
+            await unitOfWork.GetRepository<Slot>().InsertAsync(slot);
+            await unitOfWork.SaveAsync();
         }
 
-        public Task<IList<SlotServiceModel>> GetSlotAsync()
+        public async Task DeleteSlot(string id)
         {
-            throw new NotImplementedException();
+            await unitOfWork.GetRepository<Slot>().DeleteAsync(id);
+            await unitOfWork.SaveAsync();
         }
 
-        public Task<SlotServiceModel> GetSlotAsyncById(string id)
+        public async Task<IList<SlotServiceModel>> GetSlotAsync()
         {
-            throw new NotImplementedException();
+            var Slots = await unitOfWork.GetRepository<Slot>().GetAllAsync();
+            return mapper.Map<IList<SlotServiceModel>>(Slots);
         }
 
-        public Task UpdateSlot(UpdateSlotModel model, string id)
+        public async Task<SlotServiceModel> GetSlotAsyncById(string id)
         {
-            throw new NotImplementedException();
+            var slot = await unitOfWork.GetRepository<Slot>().GetByIdAsync(id);
+            return mapper.Map<SlotServiceModel>(slot);
+        }
+
+        public async Task UpdateSlot(UpdateSlotModel model, string id)
+        {
+            var slot = mapper.Map<Slot>(model);
+            await unitOfWork.GetRepository<Slot>().UpdateAsync(slot);
+            await unitOfWork.SaveAsync();
         }
     }
 }

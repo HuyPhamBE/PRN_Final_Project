@@ -1,0 +1,32 @@
+﻿@page
+@model PRN_Final_Project.Pages.SlotPage.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Slot</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Slot.startTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Slot.startTime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Slot.endTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Slot.endTime)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Slot.SlotID">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

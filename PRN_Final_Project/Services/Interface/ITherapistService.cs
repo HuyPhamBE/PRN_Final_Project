@@ -10,9 +10,9 @@ namespace Services.Interface
     public interface ITherapistService
     {
         Task<IEnumerable<Therapist>> GetAllTherapistsAsync();
-
+        Task<IList<Therapist>> GetAll();
         Task<int> GetCountActiveTherapist();
-
+        Task<Therapist?> GetTherapistById(Guid theraID);
         Task<Therapist> CreateTherapistAsync(Therapist therapist);
 
         Task<Therapist> UpdateTherapistAsync(Guid theraId);
@@ -22,5 +22,7 @@ namespace Services.Interface
         Task<bool> DeleteTherapistAsync(int id);
 
         Task<bool> UpdateStatusActiveTheraAsync(int id);
+        Task ToggleTherapistStatus(Guid id);
+        Task UpdateTherapist(Therapist therapist);
     }
 }

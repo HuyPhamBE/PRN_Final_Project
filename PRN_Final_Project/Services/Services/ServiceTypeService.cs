@@ -1,4 +1,9 @@
-﻿using Repositories.Model.ServiceType;
+﻿using AutoMapper;
+using Entities.IUOW;
+using Repositories.DB;
+using Repositories.Entities;
+using Repositories.Model.ServiceType;
+using Repositories.Model.ServiceType;
 using ServiceTypes.Interface;
 using System;
 using System.Collections.Generic;
@@ -10,29 +15,45 @@ namespace Services.Services
 {
     public class ServiceTypeService : IServiceTypeService
     {
-        public Task CreateServiceType(CreateServiceTypeModel model)
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IMapper mapper;
+
+        public ServiceTypeService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            throw new NotImplementedException();
+            this.unitOfWork = unitOfWork;
+            this.mapper = mapper;
         }
 
-        public Task DeleteServiceType(string id)
+        public async Task CreateServiceType(CreateServiceTypeModel model)
         {
-            throw new NotImplementedException();
+            ServiceType serviceType = mapper.Map<ServiceType>(model);
+            await unitOfWork.GetRepository<ServiceType>().InsertAsync(serviceType);
+            await unitOfWork.SaveAsync();
         }
 
-        public Task<IList<ServiceTypeServiceModel>> GetServiceTypeAsync()
+        public async Task DeleteServiceType(string id)
         {
-            throw new NotImplementedException();
+            await unitOfWork.GetRepository<ServiceType>().DeleteAsync(id);
+            await unitOfWork.SaveAsync();
         }
 
-        public Task<ServiceTypeServiceModel> GetServiceTypeAsyncById(string id)
+        public async Task<IList<ServiceTypeServiceModel>> GetServiceTypeAsync()
         {
-            throw new NotImplementedException();
+            var serviceTypes = await unitOfWork.GetRepository<ServiceType>().GetAllAsync();
+            return mapper.Map<IList<ServiceTypeServiceModel>>(serviceTypes);
         }
 
-        public Task UpdateServiceType(UpdateServiceTypeModel model, string id)
+        public async Task<ServiceTypeServiceModel> GetServiceTypeAsyncById(string id)
         {
-            throw new NotImplementedException();
+            var serviceType = await unitOfWork.GetRepository<ServiceType>().GetByIdAsync(id);
+            return mapper.Map<ServiceTypeServiceModel>(serviceType);
+        }
+
+        public async Task UpdateServiceType(UpdateServiceTypeModel model, string id)
+        {
+            var serviceType = mapper.Map<ServiceType>(model);
+            await unitOfWork.GetRepository<ServiceType>().UpdateAsync(serviceType);
+            await unitOfWork.SaveAsync();
         }
     }
 }

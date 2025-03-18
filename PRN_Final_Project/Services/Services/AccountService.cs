@@ -55,14 +55,7 @@ namespace Services.Services
             var result = _passwordHasher.VerifyHashedPassword(user, user.password, password);
 
             return result == PasswordVerificationResult.Success ? user : null;
-
-        private readonly IUnitOfWork _unitOfWork;
-
-        public AccountService(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
         }
-
         public async Task<IList<Account>> GetAllAccount()
         {
             try
@@ -77,6 +70,7 @@ namespace Services.Services
             {
                 throw new ApplicationException("An error occurred while retrieving therapists.", ex);
             }
+        }
         public Task<Account> getAccountByCusId(Guid cusId)
         {
             throw new NotImplementedException();

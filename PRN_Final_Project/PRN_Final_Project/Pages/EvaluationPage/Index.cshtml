@@ -1,0 +1,49 @@
+﻿@page
+@model PRN_Final_Project.Pages.EvaluationPage.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Evaluation[0].point)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Evaluation[0].status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Evaluation[0].accountID)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Evaluation) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.point)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.accountID)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.evaID">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.evaID">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.evaID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -8,5 +8,9 @@ namespace Repositories.Model.Evaluation
 {
     public class UpdateEvaluationModel
     {
+        public Guid evaID { get; set; }
+        public int point { get; set; }
+        public string status { get; set; }
+        public Guid accountID { get; set; }
     }
 }

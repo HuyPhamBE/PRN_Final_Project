@@ -8,5 +8,8 @@ namespace Repositories.Model.Slot
 {
     public class SlotServiceModel
     {
+        public Guid SlotID { get; set; }
+        public TimeSpan startTime { get; set; }
+        public TimeSpan endTime { get; set; }
     }
 }

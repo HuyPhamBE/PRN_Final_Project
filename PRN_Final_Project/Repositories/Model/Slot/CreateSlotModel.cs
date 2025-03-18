@@ -8,5 +8,7 @@ namespace Repositories.Model.Slot
 {
     public class CreateSlotModel
     {
+        public TimeSpan startTime { get; set; }
+        public TimeSpan endTime { get; set; }
     }
 }

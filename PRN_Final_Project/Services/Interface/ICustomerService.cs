@@ -15,6 +15,8 @@ namespace Services.Interface
 
         Task<int> GetTotalCustomers();
 
-
+        Task CreateCustomer(CreateCustomerModel model);
+        Task<CustomerServiceModel> GetCustomerAsyncById(string id);
+        Task UpdateCustomer(UpdateCustomerModel model, string id);
     }
 }

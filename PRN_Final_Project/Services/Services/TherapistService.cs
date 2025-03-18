@@ -133,7 +133,7 @@ namespace Services.Services
             {
                 throw new ApplicationException("An error occurred while retrieving therapists.", ex);
             }
-
+        }
         public Task<Therapist> CreateTherapistAsync(Therapist therapist)
         {
             throw new NotImplementedException();
