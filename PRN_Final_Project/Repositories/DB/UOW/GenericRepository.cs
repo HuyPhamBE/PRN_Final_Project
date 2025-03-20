@@ -33,10 +33,21 @@ namespace Repositories.DB
             return await _context.Set<T>().FirstOrDefaultAsync(predicate);
         }
 
-        public async Task<IList<T>> GetAllAsync()
+        public async Task<IList<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)
         {
-            return await _dbSet.ToListAsync();
+            IQueryable<T> query = _dbSet.AsQueryable();
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            return await query.ToListAsync();
         }
+
 
         public async Task<T?> GetByIdAsync(object id)
         {
@@ -57,5 +68,6 @@ namespace Repositories.DB
         {
             return Task.FromResult(_dbSet.Update(entity));
         }
+
     }
 }

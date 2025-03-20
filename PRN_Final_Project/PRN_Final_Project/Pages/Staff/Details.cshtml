@@ -1,0 +1,229 @@
+﻿@page
+@model PRN_Final_Project.Pages.Staff.DetailsModel
+
+@{
+	ViewData["Title"] = "Booking Details";
+}
+
+<div class="container mt-4">
+	<div class="d-flex justify-content-between align-items-center mb-4">
+		<h1 class="display-4 font-weight-bold text-primary">
+			<i class="fas fa-calendar-check mr-2"></i>Booking Details
+		</h1>
+		<a asp-page="./Index" class="btn btn-outline-primary">
+			<i class="fas fa-arrow-left mr-2"></i>Back to List
+		</a>
+	</div>
+
+	<div class="card shadow-lg border-0">
+		<div class="card-header bg-primary text-white py-3">
+			<h3 class="mb-0">
+				<i class="fas fa-receipt mr-2"></i>
+				Booking #@Model.Booking.BookingID.ToString().Substring(0, 8).ToUpper()
+			</h3>
+		</div>
+
+		<div class="card-body">
+			<div class="row">
+				<!-- Left Column -->
+				<div class="col-md-6">
+					<div class="detail-item mb-4">
+						<div class="icon-circle bg-info">
+							<i class="fas fa-clock text-white"></i>
+						</div>
+						<div>
+							<h5 class="text-secondary">Appointment Time</h5>
+							<p class="h4 text-dark">
+								@Model.Booking.appointmentDay.ToString("dd MMMM yyyy")
+								<br>
+								<span class="text-muted">
+									@if (Model.Booking.Slot != null)
+									{
+										@Model.Booking.Slot.startTime.ToString(@"hh\:mm")
+										<i class="fas fa-arrow-right mx-2 text-primary"></i>
+										@Model.Booking.Slot.endTime.ToString(@"hh\:mm")
+									}
+									else
+									{
+										<span class="badge badge-warning">Time not scheduled</span>
+									}
+
+								</span>
+							</p>
+						</div>
+					</div>
+
+					<div class="detail-item mb-4">
+						<div class="icon-circle bg-success">
+							<i class="fas fa-user-tag text-white"></i>
+						</div>
+						<div>
+							<h5 class="text-secondary">Customer Details</h5>
+							<p class="h5">
+								@(Model.Booking.Customer?.fullName ?? "No customer assigned")
+								<br>
+								<small class="text-muted">Customer ID: @Model.Booking.cusID</small>
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- Right Column -->
+				<div class="col-md-6">
+					<div class="status-card mb-4">
+						<div class="icon-circle @GetStatusBackground(Model.Booking.status)">
+							<i class="fas fa-tag text-white"></i>
+						</div>
+						<div>
+							<h5 class="text-secondary">Current Status</h5>
+							<span class="badge @GetStatusBadge(Model.Booking.status) py-2 px-3">
+								@Model.Booking.status?.ToUpper()
+							</span>
+						</div>
+					</div>
+
+					<div class="pricing-card p-4 mb-4 bg-light rounded">
+						<h5 class="text-secondary mb-3">
+							<i class="fas fa-money-bill-wave mr-2"></i>Payment Details
+						</h5>
+						<div class="d-flex justify-content-between align-items-center mb-2">
+							<span class="h6">Total Amount:</span>
+							<span class="h4 text-success">@Model.Booking.total.ToString("C")</span>
+						</div>
+						<div class="d-flex justify-content-between align-items-center">
+							<span class="h6">Deposit Paid:</span>
+							<span class="h5 text-info">@Model.Booking.deposit.ToString("C")</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Additional Details Section -->
+			<div class="row mt-4">
+				<div class="col-md-4">
+					<div class="info-box bg-white p-3 rounded shadow-sm">
+						<h6 class="text-muted text-uppercase">
+							<i class="fas fa-user-md mr-2"></i>Specialist
+						</h6>
+						<p class="h5">
+							@if (Model.Booking.Therapist != null)
+							{
+								@Model.Booking.Therapist.fullName
+								<br>
+								<small class="text-muted">ID: @Model.Booking.theraID</small>
+							}
+							else
+							{
+								<span class="text-danger">Not assigned</span>
+							}
+						</p>
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="info-box bg-white p-3 rounded shadow-sm">
+						<h6 class="text-muted text-uppercase">
+							<i class="fas fa-spa mr-2"></i>Service
+						</h6>
+						<p class="h5">
+							@(Model.Booking.Service?.serviceName ?? "No service selected")
+							@if (Model.Booking.Service != null)
+							{
+								<br>
+								<small class="text-muted">Duration: 60 mins</small>
+							}
+						</p>
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="info-box bg-white p-3 rounded shadow-sm">
+						<h6 class="text-muted text-uppercase">
+							<i class="fas fa-history mr-2"></i>Timestamps
+						</h6>
+						<div class="small">
+							<div class="d-flex justify-content-between">
+								<span>Created:</span>
+								<span>@Model.Booking.createdAt.ToString("g")</span>
+							</div>
+							<div class="d-flex justify-content-between">
+								<span>Last Updated:</span>
+								<span>@Model.Booking.updatedAt.ToString("g")</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Styles {
+	<style>
+		.icon-circle {
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin-right: 1rem;
+		}
+
+		.detail-item {
+			display: flex;
+			align-items: center;
+			padding: 1rem;
+			background: #f8f9fa;
+			border-radius: 10px;
+			transition: transform 0.2s;
+		}
+
+			.detail-item:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+			}
+
+		.status-card {
+			display: flex;
+			align-items: center;
+			padding: 1.5rem;
+			background: #fff;
+			border-radius: 10px;
+			border-left: 4px solid;
+		}
+
+		.badge {
+			font-size: 0.9rem;
+			letter-spacing: 0.5px;
+		}
+	</style>
+}
+
+@functions {
+	string GetStatusBadge(string status)
+	{
+		return status?.ToLower() switch
+		{
+			"pending" => "badge-warning",
+			"confirmed" => "badge-primary",
+			"in-progress" => "badge-info",
+			"completed" => "badge-success",
+			"cancelled" => "badge-danger",
+			_ => "badge-secondary"
+		};
+	}
+
+	string GetStatusBackground(string status)
+	{
+		return status?.ToLower() switch
+		{
+			"pending" => "bg-warning",
+			"confirmed" => "bg-primary",
+			"in-progress" => "bg-info",
+			"completed" => "bg-success",
+			"cancelled" => "bg-danger",
+			_ => "bg-secondary"
+		};
+	}
+}
