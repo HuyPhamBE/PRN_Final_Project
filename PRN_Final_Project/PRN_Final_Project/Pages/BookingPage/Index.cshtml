@@ -1,0 +1,91 @@
+﻿@page
+@model PRN_Final_Project.Pages.BookingPage.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Booking[0].appointmentDay)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Booking[0].status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Booking[0].total)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Booking[0].deposit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Booking[0].Therapist)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Booking[0].Service)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Booking[0].Slot)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Booking[0].Customer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Booking[0].createdAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Booking[0].updatedAt)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Booking) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.appointmentDay)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.total)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.deposit)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Therapist.fullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Service.description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Slot.SlotID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Customer.address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.createdAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.updatedAt)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.BookingID">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.BookingID">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.BookingID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -9,16 +9,20 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 
 namespace Services.Services
 {
     public class BookingService : IBookingService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper mapper;
 
-        public BookingService(IUnitOfWork unitOfWork)
+        public BookingService(IUnitOfWork unitOfWork,
+            IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            this.mapper = mapper;
         }
 
         public async Task<Booking?> GetById(Guid id)
@@ -106,6 +110,44 @@ namespace Services.Services
         public async Task<decimal> getTotalRevenue()
         {
             return await _unitOfWork.GetRepository<Booking>().Entities.SumAsync(b => b.total);
+        }
+
+        public async Task AddBooking(CreateBookingModel model)
+        {
+            Booking booking=mapper.Map<Booking>(model);
+            booking.BookingID = Guid.NewGuid();
+            try
+            {
+                _unitOfWork.BeginTransaction();
+                await _unitOfWork.GetRepository<Booking>().InsertAsync(booking);
+                _unitOfWork.CommitTransaction();
+            }
+            catch (Exception ex)
+            {
+                _unitOfWork.RollBack();
+                Console.WriteLine(ex.Message);
+            }
+            await _unitOfWork.SaveAsync();
+        }
+
+        public async Task UpdateBooking(UpdateBookingModel model, string id)
+        {
+            var booking = await _unitOfWork.GetRepository<Booking>()
+                 .Entities
+                 .FirstOrDefaultAsync(c => c.BookingID.ToString() == id);
+            mapper.Map(model, booking);
+            try
+            {
+                _unitOfWork.BeginTransaction();
+                await _unitOfWork.GetRepository<Booking>().UpdateAsync(booking);
+                _unitOfWork.CommitTransaction();
+            }
+            catch (Exception ex)
+            {
+                _unitOfWork.RollBack();
+                Console.WriteLine(ex.Message);
+            }
+            await _unitOfWork.SaveAsync();
         }
     }
 }

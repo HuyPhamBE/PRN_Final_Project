@@ -22,5 +22,7 @@ namespace Services.Interface
         Task<Dictionary<string, decimal>> GetMonthlyRevenue();
         Task<Booking?> GetById(Guid id);
         Task<Decimal> getTotalRevenue();
+        Task AddBooking(CreateBookingModel model);
+        Task UpdateBooking(UpdateBookingModel model, string id);
     }
 }

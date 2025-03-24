@@ -30,7 +30,7 @@ namespace PRN_Assignment.Pages
                 {
                     Console.WriteLine("Login successfully");
                     HttpContext.Session.SetString("Email", email);
-                     return RedirectToPage("/Home/Index");
+                     return RedirectToPage("/DashboardAndReport");
                 }
                 else
                 {

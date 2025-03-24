@@ -8,5 +8,8 @@ namespace Repositories.Model.Booking
 {
     public class UpdateBookingModel
     {
+        public DateTime appointmentDay { get; set; }
+        public Guid slotID { get; set; }
+        public string status { get; set; }
     }
 }

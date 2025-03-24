@@ -1,0 +1,66 @@
+﻿@page
+@model PRN_Final_Project.Pages.BookingPage.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Booking</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="BookingModel.appointmentDay" class="control-label"></label>
+                <input asp-for="BookingModel.appointmentDay" class="form-control" />
+                <span asp-validation-for="BookingModel.appointmentDay" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BookingModel.status" class="control-label"></label>
+                <input asp-for="BookingModel.status" class="form-control" />
+                <span asp-validation-for="BookingModel.status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BookingModel.total" class="control-label"></label>
+                <input asp-for="BookingModel.total" class="form-control" />
+                <span asp-validation-for="BookingModel.total" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BookingModel.deposit" class="control-label"></label>
+                <input asp-for="BookingModel.deposit" class="form-control" />
+                <span asp-validation-for="BookingModel.deposit" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BookingModel.serviceID" class="control-label"></label>
+                <select asp-for="BookingModel.serviceID" class ="form-control" asp-items="ViewBag.serviceID"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="BookingModel.slotID" class="control-label"></label>
+                <select asp-for="BookingModel.slotID" class ="form-control" asp-items="ViewBag.slotID"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="BookingModel.theraID" class="control-label"></label>
+                <select asp-for="BookingModel.theraID" class ="form-control" asp-items="ViewBag.theraID"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="BookingModel.cusID" class="control-label"></label>
+                <select asp-for="BookingModel.cusID" class ="form-control" asp-items="ViewBag.cusID"></select>
+            </div>           
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

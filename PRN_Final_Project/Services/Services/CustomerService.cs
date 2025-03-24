@@ -10,8 +10,6 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
-using Repositories.Entities;
-using Microsoft.EntityFrameworkCore;
 namespace Services.Services
 {
     public class CustomerService : ICustomerService
@@ -32,8 +30,8 @@ namespace Services.Services
 
         public async Task CreateCustomer(CreateCustomerModel model)
         {
-           Customer customer=_mapper.Map<Customer>(model);
-           customer.cusID=Guid.NewGuid();
+            Customer customer = _mapper.Map<Customer>(model);
+            customer.cusID = Guid.NewGuid();
             try
             {
                 _unitOfWork.BeginTransaction();
@@ -43,7 +41,7 @@ namespace Services.Services
             catch (Exception ex)
             {
                 _unitOfWork.RollBack();
-                Console.WriteLine(ex.Message);            
+                Console.WriteLine(ex.Message);
             }
             await _unitOfWork.SaveAsync();
         }
@@ -98,12 +96,7 @@ namespace Services.Services
                 Console.WriteLine(ex.Message);
             }
             await _unitOfWork.SaveAsync();
-        }
-
-        public CustomerService(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
+        }     
 
         public async Task<IEnumerable<Customer>> GetAllCustomerAsync()
         {
