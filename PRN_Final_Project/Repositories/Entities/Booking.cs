@@ -22,6 +22,6 @@ namespace Repositories.Entities
         public virtual Service Service { get; set; }
         public virtual Slot Slot { get; set; }
         public virtual Customer Customer { get; set; }
-        public virtual ICollection<TherapyResult> TherapyResults { get; set; }
+        public virtual ICollection<TherapyResult>? TherapyResults { get; set; }
     }
 }

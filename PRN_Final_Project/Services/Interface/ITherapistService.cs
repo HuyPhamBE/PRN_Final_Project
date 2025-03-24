@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Repositories.Entities;
 
 namespace Services.Interface
 {
@@ -24,5 +25,6 @@ namespace Services.Interface
         Task<bool> UpdateStatusActiveTheraAsync(int id);
         Task ToggleTherapistStatus(Guid id);
         Task UpdateTherapist(Therapist therapist);
+        Task<List<Therapist>> GetAllTherapists();
     }
 }

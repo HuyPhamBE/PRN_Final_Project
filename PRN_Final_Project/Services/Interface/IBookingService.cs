@@ -5,6 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Repositories.Model.Booking;
+using Repositories.Entities;
+using static Services.Services.BookingService;
+
 namespace Services.Interface
 {
     public interface IBookingService
@@ -24,5 +27,13 @@ namespace Services.Interface
         Task<Decimal> getTotalRevenue();
         Task AddBooking(CreateBookingModel model);
         Task UpdateBooking(UpdateBookingModel model, string id);
+        Task<BookingsResponse> GetAllBookings(string searchTerm, int pageIndex, int pageSize);
+
+        Task<bool> IsTherapistAvailableAsync(Guid therapistId, DateTime appointmentDay, Guid slotId);
+
+        Task<Booking> GetBookingByID(Guid id);
+
+        Task UpdateBooking(Booking booking);
+
     }
 }
