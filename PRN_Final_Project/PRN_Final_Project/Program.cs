@@ -17,22 +17,11 @@ builder.Configuration
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddEnvironmentVariables();
 builder.Services.AddRazorPages();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IBookingService, BookingService>();
-builder.Services.AddScoped<ITherapistService, TherapistService>();
-
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IPasswordHasher<Account>, PasswordHasher<Account>>();
-builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper((Assembly[])AppDomain.CurrentDomain.GetAssemblies());
 // Add session
 builder.Services.AddSession();  
-builder.Services.AddScoped<ITherapistService, TherapistService>();
-builder.Services.AddScoped<IBookingService, BookingService>();
-builder.Services.AddScoped<ITherapistResultService, TherapistResultService>();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

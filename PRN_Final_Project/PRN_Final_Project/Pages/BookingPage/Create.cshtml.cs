@@ -65,6 +65,7 @@ namespace PRN_Final_Project.Pages.BookingPage
             var userIdString = httpContextAccessor.HttpContext.Request.Cookies["UserId"];
             var cusid = await customerService.GetCustomerByUserId(Guid.Parse(userIdString));
            BookingModel.cusID = cusid.cusID;
+            BookingModel.status = "Not Completed";
            await bookingService.AddBooking(BookingModel);
 
             return RedirectToPage("./Index");
