@@ -6,9 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Entities.IUOW;
-using Repositories.Entities;
-using Services.Interface;
 
 namespace Services.Services
 {
@@ -171,9 +168,6 @@ namespace Services.Services
         {
             throw new NotImplementedException();
 
-        public TherapistService(IUnitOfWork unitOfWord)
-        {
-            _unitOfWork = unitOfWord;
         }
 
         public async Task<List<Therapist>> GetAllTherapists()
