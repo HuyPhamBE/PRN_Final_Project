@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Identity.Client;
@@ -26,16 +29,40 @@ namespace PRN_Assignment.Pages
             try
             {
                 var account = await _accountService.Login(email, password);
-                    if (account != null)
+
+
+                if (account != null)
                 {
-                    Console.WriteLine("Login successfully");
-                    HttpContext.Session.SetString("Email", email);
-                     return RedirectToPage("/DashboardAndReport");
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, account.accountID.ToString()),
+                        new Claim(ClaimTypes.Email, account.email),
+                        new Claim(ClaimTypes.Role, account.role)
+                    };
+
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var authProperties = new AuthenticationProperties { IsPersistent = true };
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+
+                    switch (account.role.ToLower())
+                    {
+                        case "user":
+                            return RedirectToPage("/Homepage");  
+                        case "staff":
+                            return RedirectToPage("/Staff/Index");
+                        case "therapist":
+                            return RedirectToPage("/TherapistPage/Index");
+                        case "admin":
+                            return RedirectToPage("/DashboardAndReport/DashboardAndReport");
+                        default:
+                            return RedirectToPage();
+                    }
+
                 }
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Login failed. Please check your username and password. If do not already have, please register");
-                    Console.WriteLine("Login failed. Please check your username and password. If do not already have, please register");
+
                     return Page();
                 }
             }
@@ -46,6 +73,5 @@ namespace PRN_Assignment.Pages
                 return Page();
             }
         }
-
     }
 }

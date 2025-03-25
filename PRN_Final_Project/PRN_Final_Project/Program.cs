@@ -1,4 +1,5 @@
 using Entities.IUOW;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using PRN_Assignment;
 using Repositories.DB;
@@ -11,6 +12,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDI(builder.Configuration);
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+         .AddCookie(options =>
+         {
+             options.LoginPath = "/";
+             options.AccessDeniedPath = "/Error";
+         });
 
 builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
@@ -27,8 +34,8 @@ builder.Services.AddScoped<IPasswordHasher<Account>, PasswordHasher<Account>>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper((Assembly[])AppDomain.CurrentDomain.GetAssemblies());
-// Add session
-builder.Services.AddSession();  
+//// Add session
+//builder.Services.AddSession();  
 builder.Services.AddScoped<ITherapistService, TherapistService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<ITherapistResultService, TherapistResultService>();
@@ -48,9 +55,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// Use session
-app.UseSession();
+//// Use session
+//app.UseSession();
 
+app.UseAuthentication();    
 app.UseAuthorization();
 
 app.MapRazorPages();
