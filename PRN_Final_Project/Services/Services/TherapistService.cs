@@ -1,4 +1,5 @@
 ﻿using Entities.IUOW;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Entities;
 using Services.Interface;
@@ -12,10 +13,12 @@ namespace Services.Services
     public class TherapistService : ITherapistService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IPasswordHasher<Account> _passwordHasher;
 
-        public TherapistService(IUnitOfWork unitOfWork)
+        public TherapistService(IUnitOfWork unitOfWork, IPasswordHasher<Account> passwordHasher)
         {
             _unitOfWork = unitOfWork;
+            _passwordHasher = passwordHasher;
         }
 
         public async Task AddNewTherapist(Therapist therapist)
@@ -134,14 +137,53 @@ namespace Services.Services
                 throw new ApplicationException("An error occurred while retrieving therapists.", ex);
             }
         }
-        public Task<Therapist> CreateTherapistAsync(Therapist therapist)
+        public async Task<Therapist> CreateTherapistWithAccountAsync(Account account, Therapist therapist)
         {
-            throw new NotImplementedException();
+            var accountRepository = _unitOfWork.GetRepository<Account>();
+            var therapistRepository = _unitOfWork.GetRepository<Therapist>();
+
+            // Check if the username or email already exists
+            var existingAccount = await accountRepository.FirstorDefaultAsync(acc => acc.userName == account.userName || acc.email == account.email);
+            if (existingAccount != null)
+            {
+                throw new Exception("Username or Email already exists!");
+            }
+            Console.WriteLine(account.password);
+  
+            // Hash the password before saving
+            account.password = _passwordHasher.HashPassword(account, account.password);
+
+            // Save the account
+            await accountRepository.InsertAsync(account);
+            await _unitOfWork.SaveAsync(); // Ensure accountID is generated
+
+            // Link the therapist to the created account
+            therapist.accountID = account.accountID;
+
+            // Save the therapist
+            await therapistRepository.InsertAsync(therapist);
+            await _unitOfWork.SaveAsync(); // Save therapist
+
+            return therapist;
         }
 
-        public Task<bool> DeleteTherapistAsync(int id)
+        public async Task<bool> DeleteTherapistAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var repository = _unitOfWork.GetRepository<Therapist>();
+
+            var therapist = await repository.GetByIdAsync(id);
+            if (therapist == null)
+            {
+                throw new KeyNotFoundException($"Therapist with ID {id} not found.");
+            }
+
+            // Mark as inactive instead of deleting
+            therapist.status = "inactive";
+
+            await repository.UpdateAsync(therapist);
+            await _unitOfWork.SaveAsync();
+
+            return true;
         }
 
         public async Task<IEnumerable<Therapist>> GetAllTherapistsAsync()
@@ -164,9 +206,24 @@ namespace Services.Services
             throw new NotImplementedException();
         }
 
-        public Task<Therapist> UpdateTherapistAsync(Guid theraId)
+        public async Task<Therapist> UpdateTherapistAsync(Guid theraId)
         {
-            throw new NotImplementedException();
+            var repository = _unitOfWork.GetRepository<Therapist>();
+
+            Therapist therapist = await repository.GetByIdAsync(theraId);
+
+            if (therapist == null)
+            {
+                throw new KeyNotFoundException($"Therapist with ID {theraId} not found.");
+            }
+
+            
+            repository.UpdateAsync(therapist);
+
+            
+            await _unitOfWork.SaveAsync();
+
+            return therapist;
 
         }
 

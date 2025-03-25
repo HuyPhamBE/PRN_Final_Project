@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="5cebabbc-c31d-46ba-9cba-646533d74e2c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/PRN_Final_Project/PRN_Final_Project/Pages/DashboardAndReport/DashboardAndReport.cshtml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PRN_Final_Project/PRN_Final_Project/Pages/DashboardAndReport/DashboardAndReport.cshtml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRN_Final_Project/Repositories/DB/UOW/GenericRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PRN_Final_Project/Repositories/DB/UOW/GenericRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRN_Final_Project/Repositories/Entities/IUOW/IGenericRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PRN_Final_Project/Repositories/Entities/IUOW/IGenericRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRN_Final_Project/Repositories/Model/Therapist/CreateTherapistModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PRN_Final_Project/Repositories/Model/Therapist/CreateTherapistModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRN_Final_Project/Services/Interface/ITherapistService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PRN_Final_Project/Services/Interface/ITherapistService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRN_Final_Project/Services/Services/AccountService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PRN_Final_Project/Services/Services/AccountService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRN_Final_Project/Services/Services/CustomerService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PRN_Final_Project/Services/Services/CustomerService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRN_Final_Project/Services/Services/TherapistService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PRN_Final_Project/Services/Services/TherapistService.cs" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;nqbao1002&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/HuyPhamBE/PRN_Final_Project.git&quot;,
+    &quot;accountId&quot;: &quot;38bd3583-05af-4d47-8980-48d7b4a7a09b&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="2uFlGt2f2sdnjepF3wYYxsi9L9c" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;bao/manager&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/ADMIN/Desktop/FINAL-PRN222/PRN_Final_Project&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5cebabbc-c31d-46ba-9cba-646533d74e2c" name="Changes" comment="" />
+      <created>1741852111003</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1741852111003</updated>
+      <workItem from="1741852112093" duration="689000" />
+      <workItem from="1742119702220" duration="11000" />
+      <workItem from="1742213913753" duration="10000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

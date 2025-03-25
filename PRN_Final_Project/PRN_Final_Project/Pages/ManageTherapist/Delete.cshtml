@@ -1,0 +1,76 @@
+﻿@page
+@model PRN_Final_Project.Pages.ManageTherapist.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Therapist</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Therapist.fullName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Therapist.fullName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Therapist.gender)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Therapist.gender)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Therapist.major)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Therapist.major)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Therapist.imageUrl)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Therapist.imageUrl)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Therapist.exp)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Therapist.exp)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Therapist.status)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Therapist.status)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Therapist.Account)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Therapist.Account.email)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Therapist.createdAt)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Therapist.createdAt)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Therapist.updatedAt)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Therapist.updatedAt)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="Therapist.theraID" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>
