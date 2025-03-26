@@ -1,0 +1,85 @@
+﻿@page
+@model PRN_Final_Project.Pages.ServicePage.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Service[0].serviceName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Service[0].description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Service[0].minRange)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Service[0].maxRange)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Service[0].status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Service[0].price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Service[0].ServiceType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Service[0].createdAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Service[0].updatedAt)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Service) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.serviceName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.minRange)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.maxRange)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceType.serviceName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.createdAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.updatedAt)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.ServiceID">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.ServiceID">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.ServiceID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

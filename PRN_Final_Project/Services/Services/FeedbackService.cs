@@ -55,7 +55,7 @@ namespace Services.Services
 
         public async Task<IEnumerable<Feedback>> GetRecentFeedbackAsync(int count)
         {
-            return await _unitOfWork.GetRepository<Feedback>().Entities.OrderByDescending(r => r.createdAt).Take(count).Include(a => a.Account).Include(s => s.Service).ToListAsync();
+            return await _unitOfWork.GetRepository<Feedback>().Entities.OrderByDescending(r => r.createdAt).Take(count).Include(a => a.Account).ThenInclude(a => a.Customer).Include(s => s.Service).ToListAsync();
         }
     }
 }

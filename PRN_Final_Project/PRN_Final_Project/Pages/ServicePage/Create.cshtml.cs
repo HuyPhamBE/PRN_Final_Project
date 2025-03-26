@@ -7,27 +7,26 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Repositories.DB;
 using Repositories.Entities;
-using Repositories.Model.Customer;
-using Services.Interface;
 
-namespace PRN_Final_Project.Pages.CustomerManage
+namespace PRN_Final_Project.Pages.ServicePage
 {
     public class CreateModel : PageModel
     {
-        private readonly ICustomerService _customerService;
+        private readonly Repositories.DB.ApplicationDbContext _context;
 
-        public CreateModel(ICustomerService customerService)
-        {            
-            this._customerService = customerService;
+        public CreateModel(Repositories.DB.ApplicationDbContext context)
+        {
+            _context = context;
         }
 
         public IActionResult OnGet()
         {
+        ViewData["ServiceTypeID"] = new SelectList(_context.ServiceTypes, "ServiceTypeID", "serviceName");
             return Page();
         }
 
         [BindProperty]
-        public CreateCustomerModel Customer { get; set; } = default!;
+        public Service Service { get; set; } = default!;
 
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
@@ -36,9 +35,9 @@ namespace PRN_Final_Project.Pages.CustomerManage
             {
                 return Page();
             }
-            Customer.cusID=Guid.Parse(HttpContext.Session.GetString("UserID"));
-            Customer.fullName = HttpContext.Session.GetString("UserName");
-            await _customerService.CreateCustomer(Customer);
+
+            _context.Services.Add(Service);
+            await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }

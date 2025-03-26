@@ -4,52 +4,35 @@
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Pages/Shared/_Layout.cshtml";
+    var notification = TempData["Notification"] as string;
+    var minDate = DateTime.Today.AddDays(1).ToString("yyyy-MM-dd");
 }
-
-<h1>Create</h1>
-
-<h4>Booking</h4>
+@if (!string.IsNullOrEmpty(notification))
+{
+    <div class="alert alert-warning">
+        @notification
+    </div>
+}
+<h4 class="d-flex justify-content-center"> Booking</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="d-flex justify-content-center">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="BookingModel.appointmentDay" class="control-label"></label>
-                <input asp-for="BookingModel.appointmentDay" class="form-control" />
+                <label asp-for="BookingModel.appointmentDay" class="control-label"> Appointment day</label>
+                <input asp-for="BookingModel.appointmentDay" type="date" class="form-control"
+                       min="@minDate" />
                 <span asp-validation-for="BookingModel.appointmentDay" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="BookingModel.status" class="control-label"></label>
-                <input asp-for="BookingModel.status" class="form-control" />
-                <span asp-validation-for="BookingModel.status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BookingModel.total" class="control-label"></label>
-                <input asp-for="BookingModel.total" class="form-control" />
-                <span asp-validation-for="BookingModel.total" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BookingModel.deposit" class="control-label"></label>
-                <input asp-for="BookingModel.deposit" class="form-control" />
-                <span asp-validation-for="BookingModel.deposit" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BookingModel.serviceID" class="control-label"></label>
-                <select asp-for="BookingModel.serviceID" class ="form-control" asp-items="ViewBag.serviceID"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="BookingModel.slotID" class="control-label"></label>
+                <label asp-for="BookingModel.slotID" class="control-label">Slot</label>
                 <select asp-for="BookingModel.slotID" class ="form-control" asp-items="ViewBag.slotID"></select>
             </div>
             <div class="form-group">
-                <label asp-for="BookingModel.theraID" class="control-label"></label>
+                <label asp-for="BookingModel.theraID" class="control-label">Therapist</label>
                 <select asp-for="BookingModel.theraID" class ="form-control" asp-items="ViewBag.theraID"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="BookingModel.cusID" class="control-label"></label>
-                <select asp-for="BookingModel.cusID" class ="form-control" asp-items="ViewBag.cusID"></select>
-            </div>           
+            </div>          
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -57,9 +40,9 @@
     </div>
 </div>
 
-<div>
+@* <div>
     <a asp-page="Index">Back to List</a>
-</div>
+</div> *@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

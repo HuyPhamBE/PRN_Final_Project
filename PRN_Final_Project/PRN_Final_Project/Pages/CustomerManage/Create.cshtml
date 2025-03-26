@@ -15,11 +15,6 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Customer.fullName" class="control-label"></label>
-                <input asp-for="Customer.fullName" class="form-control" />
-                <span asp-validation-for="Customer.fullName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Customer.phone" class="control-label"></label>
                 <input asp-for="Customer.phone" class="form-control" />
                 <span asp-validation-for="Customer.phone" class="text-danger"></span>
@@ -31,7 +26,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Customer.dob" class="control-label"></label>
-                <input asp-for="Customer.dob" class="form-control" />
+                <input asp-for="Customer.dob" type="date" class="form-control" />
                 <span asp-validation-for="Customer.dob" class="text-danger"></span>
             </div>
             <div class="form-group form-check">

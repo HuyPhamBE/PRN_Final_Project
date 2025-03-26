@@ -43,6 +43,9 @@ namespace PRN_Assignment.Pages
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     var authProperties = new AuthenticationProperties { IsPersistent = true };
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+                    HttpContext.Session.SetString("Email", email);
+                    HttpContext.Session.SetString("UserName", account.userName);
+                    HttpContext.Session.SetString("UserId", account.accountID.ToString());
 
                     switch (account.role.ToLower())
                     {
@@ -57,7 +60,6 @@ namespace PRN_Assignment.Pages
                         default:
                             return RedirectToPage();
                     }
-
                 }
                 else
                 {

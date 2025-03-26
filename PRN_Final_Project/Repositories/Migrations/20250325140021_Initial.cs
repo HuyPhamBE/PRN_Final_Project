@@ -112,28 +112,6 @@ namespace Repositories.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Evaluations",
-                columns: table => new
-                {
-                    evaID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    point = table.Column<int>(type: "int", nullable: false),
-                    status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    accountID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    createdAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    updatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Evaluations", x => x.evaID);
-                    table.ForeignKey(
-                        name: "FK_Evaluations_Accounts_accountID",
-                        column: x => x.accountID,
-                        principalTable: "Accounts",
-                        principalColumn: "accountID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Therapists",
                 columns: table => new
                 {
@@ -160,14 +138,42 @@ namespace Repositories.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Evaluations",
+                columns: table => new
+                {
+                    evaID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    point = table.Column<int>(type: "int", nullable: false),
+                    status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    accountID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ServiceTypeID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    createdAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    updatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Evaluations", x => x.evaID);
+                    table.ForeignKey(
+                        name: "FK_Evaluations_Accounts_accountID",
+                        column: x => x.accountID,
+                        principalTable: "Accounts",
+                        principalColumn: "accountID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Evaluations_ServiceTypes_ServiceTypeID",
+                        column: x => x.ServiceTypeID,
+                        principalTable: "ServiceTypes",
+                        principalColumn: "ServiceTypeID");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Services",
                 columns: table => new
                 {
                     ServiceID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     serviceName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    minRage = table.Column<int>(type: "int", nullable: false),
-                    maxRage = table.Column<int>(type: "int", nullable: false),
+                    minRange = table.Column<int>(type: "int", nullable: false),
+                    maxRange = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ServiceTypeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -368,6 +374,11 @@ namespace Repositories.Migrations
                 name: "IX_Evaluations_accountID",
                 table: "Evaluations",
                 column: "accountID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Evaluations_ServiceTypeID",
+                table: "Evaluations",
+                column: "ServiceTypeID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Feedbacks_accountID",

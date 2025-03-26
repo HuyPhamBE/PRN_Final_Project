@@ -9,7 +9,7 @@ namespace Services.Interface
 {
     public interface IServiceService
     {
-        Task<ServiceServiceModel> GetServiceAsyncById(string id);
+        Task<ServiceServiceModel> GetServiceAsyncById(Guid id);
         Task<IList<ServiceServiceModel>> GetServiceAsync();
         Task CreateService(CreateServiceModel model);
         Task DeleteService(string id);

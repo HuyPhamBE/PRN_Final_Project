@@ -193,6 +193,9 @@ namespace Repositories.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ServiceTypeID")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("accountID")
                         .HasColumnType("uniqueidentifier");
 
@@ -210,6 +213,8 @@ namespace Repositories.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("evaID");
+
+                    b.HasIndex("ServiceTypeID");
 
                     b.HasIndex("accountID");
 
@@ -337,10 +342,10 @@ namespace Repositories.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("maxRage")
+                    b.Property<int>("maxRange")
                         .HasColumnType("int");
 
-                    b.Property<int>("minRage")
+                    b.Property<int>("minRange")
                         .HasColumnType("int");
 
                     b.Property<decimal>("price")
@@ -553,6 +558,10 @@ namespace Repositories.Migrations
 
             modelBuilder.Entity("Repositories.Entities.Evaluation", b =>
                 {
+                    b.HasOne("Repositories.Entities.ServiceType", null)
+                        .WithMany("Services")
+                        .HasForeignKey("ServiceTypeID");
+
                     b.HasOne("Repositories.Entities.Account", "Accounts")
                         .WithMany("Evaluations")
                         .HasForeignKey("accountID")
@@ -614,7 +623,7 @@ namespace Repositories.Migrations
             modelBuilder.Entity("Repositories.Entities.Service", b =>
                 {
                     b.HasOne("Repositories.Entities.ServiceType", "ServiceType")
-                        .WithMany("Services")
+                        .WithMany()
                         .HasForeignKey("ServiceTypeID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

@@ -9,10 +9,10 @@ namespace Services.Interface
 {
     public interface ISlotService
     {
-        Task<SlotServiceModel> GetSlotAsyncById(string id);
+        Task<SlotServiceModel> GetSlotAsyncById(Guid id);
         Task<IList<SlotServiceModel>> GetSlotAsync();
         Task CreateSlot(CreateSlotModel model);
-        Task DeleteSlot(string id);
+        Task DeleteSlot(Guid id);
         Task UpdateSlot(UpdateSlotModel model, string id);
     }
 }
