@@ -120,7 +120,6 @@ namespace Services.Services
         public async Task AddBooking(CreateBookingModel model)
         {
             Booking booking=mapper.Map<Booking>(model);
-            booking.BookingID = Guid.NewGuid();
             try
             {
                 _unitOfWork.BeginTransaction();

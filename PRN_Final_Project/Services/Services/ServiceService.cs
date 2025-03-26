@@ -37,7 +37,7 @@ namespace Services.Services
             return mapper.Map<IList<ServiceServiceModel>>(services);
         }
        
-        public async Task<ServiceServiceModel> GetServiceAsyncById(string id)
+        public async Task<ServiceServiceModel> GetServiceAsyncById(Guid id)
         {
             var service = await unitOfWork.GetRepository<Service>().GetByIdAsync(id);
             return mapper.Map<ServiceServiceModel>(service);

@@ -1,0 +1,19 @@
+﻿@page
+@model PRN_Final_Project.Pages.PaymentPage.PaymentCallBackModel
+@{
+}
+<h5>Thanh toán thành công</h5>
+<h6>OrderID: @Model.BookingModel.BookingID</h6>
+<h6>OrderInfo @Model.Info</h6>
+<h6>Tổng tiền: @Model.deposit</h6>
+<form method="post" asp-page-handler="SavePayment">
+    <input type="hidden" asp-for="PaymentDetails.paymentID" />
+    <input type="hidden" asp-for="PaymentDetails.amount" />
+    <input type="hidden" asp-for="PaymentDetails.orderInfo" />
+    <input type="hidden" asp-for="PaymentDetails.status" />
+    <input type="hidden" asp-for="PaymentDetails.bankCode" />
+    <input type="hidden" asp-for="PaymentDetails.paymentDay" />
+    <input type="hidden" asp-for="PaymentDetails.cusID" />
+    <input type="hidden" asp-for="PaymentDetails.bookingID" />
+<button class="btn" type="submit">Save payment</button>
+</form>

@@ -21,6 +21,9 @@ namespace PRN_Assignment
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IServiceService, ServiceService>();
             services.AddScoped<ISlotService, SlotService>();
+            services.AddScoped<IEvaluationService, EvaluationService>();
+            services.AddScoped<IVnPayService, VnPayService>();
+            services.AddScoped<IPaymentService, PaymentService>();
         }
         public static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {

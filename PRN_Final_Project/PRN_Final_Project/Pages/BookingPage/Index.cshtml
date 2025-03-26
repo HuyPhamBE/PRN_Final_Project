@@ -69,7 +69,7 @@
                 @Html.DisplayFor(modelItem => item.Service.description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Slot.SlotID)
+                @item.Slot.startTime.ToString("hh\\:mm") - @item.Slot.endTime.ToString("hh\\:mm")
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Customer.address)

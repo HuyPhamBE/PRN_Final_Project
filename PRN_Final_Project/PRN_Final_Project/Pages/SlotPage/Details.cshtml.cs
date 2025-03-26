@@ -23,14 +23,14 @@ namespace PRN_Final_Project.Pages.SlotPage
 
         public SlotServiceModel Slot { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(Guid? id)
+        public async Task<IActionResult> OnGetAsync(Guid id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            Slot = await slotService.GetSlotAsyncById(id.ToString());
+            Slot = await slotService.GetSlotAsyncById(id);
             return Page();
         }
     }

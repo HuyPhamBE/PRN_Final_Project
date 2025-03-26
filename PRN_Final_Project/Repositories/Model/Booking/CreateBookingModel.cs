@@ -8,6 +8,7 @@ namespace Repositories.Model.Booking
 {
     public class CreateBookingModel
     {
+        public Guid BookingID { get; set; } = Guid.NewGuid();
         public DateTime appointmentDay { get; set; }
         public string status {  get; set; }
         public decimal total { get; set; }        
