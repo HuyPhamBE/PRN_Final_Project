@@ -1,0 +1,55 @@
+﻿@page
+@model PRN_Final_Project.Pages.ManageTherapist.IndexModel
+
+@{
+    ViewData["Title"] = "Therapists List";
+}
+
+<h1>Therapists List</h1>
+
+<p>
+    <a asp-page="Create" class="btn btn-primary">Create New Therapist</a>
+</p>
+
+@if (Model.Therapists != null && Model.Therapists.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Therapists[0].fullName)</th>
+                <th>@Html.DisplayNameFor(model => model.Therapists[0].gender)</th>
+                <th>@Html.DisplayNameFor(model => model.Therapists[0].major)</th>
+                <th>@Html.DisplayNameFor(model => model.Therapists[0].imageUrl)</th>
+                <th>@Html.DisplayNameFor(model => model.Therapists[0].exp)</th>
+                <th>@Html.DisplayNameFor(model => model.Therapists[0].status)</th>
+                <th>@Html.DisplayNameFor(model => model.Therapists[0].Account.email)</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Therapists)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.fullName)</td>
+                    <td>@(item.gender ? "Male" : "Female")</td>
+                    <td>@Html.DisplayFor(modelItem => item.major)</td>
+                    <td><img src="@item.imageUrl" alt="Therapist Image" style="width:50px;height:50px;border-radius:5px;" /></td>
+                    <td>@Html.DisplayFor(modelItem => item.exp) years</td>
+                    <td>@Html.DisplayFor(modelItem => item.status)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Account.email)</td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.theraID" class="btn btn-warning btn-sm">Edit</a>
+                        <a asp-page="./Details" asp-route-id="@item.theraID" class="btn btn-info btn-sm">Details</a>
+                        <a asp-page="./Delete" asp-route-id="@item.theraID" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-warning">
+        <strong>No therapists available.</strong> Please add new therapists.
+    </div>
+}

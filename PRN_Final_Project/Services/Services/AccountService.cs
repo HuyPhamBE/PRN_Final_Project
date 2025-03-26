@@ -34,6 +34,7 @@ namespace Services.Services
             var customerRepository = _unitOfWork.GetRepository<Customer>();
 
             var existingAccount = await repository.FirstorDefaultAsync(acc => acc.userName == account.userName || acc.email == account.email);
+
             if (existingAccount != null)
             {
                 throw new Exception("Username or Email already exists!");
