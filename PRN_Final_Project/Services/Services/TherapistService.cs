@@ -181,5 +181,11 @@ namespace Services.Services
             return (List<Therapist>)allTherapists;
 
         }
+
+        public async Task<Therapist> GetTherapistByAccountId(Guid accountId)
+        {
+            var repo = _unitOfWork.GetRepository<Therapist>();
+            return await repo.FirstorDefaultAsync(t => t.accountID == accountId);
+        }
     }
 }

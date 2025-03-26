@@ -121,5 +121,23 @@ namespace Services.Services
                 throw new ApplicationException("An error occurred while updating the therapy result status.", ex);
             }
         }
+
+        public async Task<IList<TherapyResult>> GetAllById(Guid therapyResultId)
+        {
+            try
+            {
+                var repository = _unitOfWork.GetRepository<TherapyResult>();
+
+                return await repository.Entities
+                    .Include(t => t.Booking)
+                    .ThenInclude(b => b.Customer)
+                    .Where(t => t.theraResultID == therapyResultId)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("An error occurred while retrieving therapy results.", ex);
+            }
+        }
     }
 }
