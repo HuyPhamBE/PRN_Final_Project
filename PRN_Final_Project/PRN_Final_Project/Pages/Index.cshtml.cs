@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Identity.Client;
 using Services.Interface;
+using Repositories.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace PRN_Assignment.Pages
 {
@@ -22,6 +24,30 @@ namespace PRN_Assignment.Pages
         public IndexModel(IAccountService accountService)
         {
             _accountService = accountService;
+        }
+
+        public IActionResult OnGet()
+        {
+            // Check if user is already authenticated
+            if (User.Identity.IsAuthenticated)
+            {
+                var uRole = User.FindFirstValue(ClaimTypes.Role);
+                switch (uRole.ToLower())
+                {
+                    case "user":
+                        return RedirectToPage("/Homepage");
+                    case "staff":
+                        return RedirectToPage("/Staff/Index");
+                    case "therapist":
+                        return RedirectToPage("/TherapistPage/Index");
+                    case "admin":
+                        return RedirectToPage("/DashboardAndReport/DashboardAndReport");
+                    default:
+                        return RedirectToPage();
+                }
+            }
+
+            return Page();
         }
 
         public async Task<IActionResult> OnPost()
