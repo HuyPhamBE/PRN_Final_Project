@@ -7,27 +7,24 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Repositories.DB;
 using Repositories.Entities;
+using Services.Interface;
 
 namespace PRN_Final_Project.Pages.BookingPage
 {
     public class IndexModel : PageModel
-    {
-        private readonly Repositories.DB.ApplicationDbContext _context;
+    {        
+        private readonly IBookingService bookingService;
 
-        public IndexModel(Repositories.DB.ApplicationDbContext context)
-        {
-            _context = context;
+        public IndexModel(IBookingService bookingService)
+        {            
+            this.bookingService = bookingService;
         }
 
         public IList<Booking> Booking { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            Booking = await _context.Bookings
-                .Include(b => b.Customer)
-                .Include(b => b.Service)
-                .Include(b => b.Slot)
-                .Include(b => b.Therapist).ToListAsync();
+            Booking =await bookingService.GetAll();
         }
     }
 }

@@ -9,22 +9,22 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a class="btn" asp-page="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Booking[0].appointmentDay)
+               Appointment day
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Booking[0].status)
+                Status
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Booking[0].total)
+               Total
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Booking[0].deposit)
+                Deposit
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Booking[0].Therapist)
@@ -39,12 +39,14 @@
                 @Html.DisplayNameFor(model => model.Booking[0].Customer)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Booking[0].createdAt)
+                Create at
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Booking[0].updatedAt)
+                Update at
             </th>
-            <th></th>
+            <th>
+                Actions
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -72,7 +74,7 @@
                 @item.Slot.startTime.ToString("hh\\:mm") - @item.Slot.endTime.ToString("hh\\:mm")
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Customer.address)
+                @Html.DisplayFor(modelItem => item.Customer.fullName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.createdAt)
@@ -81,9 +83,13 @@
                 @Html.DisplayFor(modelItem => item.updatedAt)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.BookingID">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.BookingID">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.BookingID">Delete</a>
+                    <a asp-page="./Edit" asp-route-id="@item.BookingID" class="btn btn-warning btn-sm">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.BookingID" class="btn btn-info btn-sm">Details</a> |
+                    <form method="post" asp-page="./Delete" asp-route-id="@item.BookingID" style="display:inline;">
+                        <button type="submit" class="btn @(item.status == "Deleted" ? "btn-success" : "btn-danger") btn-sm">
+                            @(item.status == "Deleted" ? "Restore" : "Delete")
+                        </button>
+                    </form>
             </td>
         </tr>
 }

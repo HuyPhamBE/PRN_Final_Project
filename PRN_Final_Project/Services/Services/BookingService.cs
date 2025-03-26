@@ -154,12 +154,6 @@ namespace Services.Services
             await _unitOfWork.SaveAsync();
         }
 
-
-        public BookingService(IUnitOfWork unitOfWord)
-        {
-            _unitOfWork = unitOfWord;
-        }
-
         public class BookingsResponse
         {
             public List<Booking> Bookings { get; set; }
@@ -274,6 +268,15 @@ namespace Services.Services
 
 
         }
-
+        public async Task<IList<Booking>> GetAll()
+        {
+            var bookings = await _unitOfWork.GetRepository<Booking>().Entities
+                .Include(b => b.Customer)
+                .Include(b => b.Service)
+                .Include(b => b.Slot)
+                .Include(b => b.Therapist).ToListAsync();
+            return bookings
+            ;
+        }
     }
 }

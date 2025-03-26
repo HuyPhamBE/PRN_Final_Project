@@ -34,6 +34,7 @@ namespace Services.Interface
         Task<Booking> GetBookingByID(Guid id);
 
         Task UpdateBooking(Booking booking);
+        Task<IList<Booking>> GetAll();
 
     }
 }

@@ -61,8 +61,8 @@ namespace PRN_Final_Project.Pages.BookingPage
         {
             var userIdString = HttpContext.Session.GetString("UserId");
             var cusid = await customerService.GetCustomerByUserId(Guid.Parse(userIdString));
-           BookingModel.cusID = cusid.cusID;
-           BookingModel.status = "Not Completed";
+            BookingModel.cusID = cusid.cusID;
+            BookingModel.status = "Not Completed";
             TempData["BookingData"] = JsonConvert.SerializeObject(BookingModel);
 
             return RedirectToPage("/BookingPage/ChooseServiceForBooking");
