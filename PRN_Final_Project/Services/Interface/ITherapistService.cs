@@ -26,5 +26,7 @@ namespace Services.Interface
         Task ToggleTherapistStatus(Guid id);
         Task UpdateTherapist(Therapist therapist);
         Task<List<Therapist>> GetAllTherapists();
+        Task<Therapist> GetTherapistByAccountId(Guid accountId);
+
     }
 }

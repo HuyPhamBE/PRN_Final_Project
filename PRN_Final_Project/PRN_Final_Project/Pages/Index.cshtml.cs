@@ -11,7 +11,7 @@ namespace PRN_Assignment.Pages
     public class IndexModel : PageModel
     {
         [BindProperty]
-        public string email { get; set; }
+        public string username { get; set; }
 
         [BindProperty]
         public string password { get; set; }
@@ -28,14 +28,14 @@ namespace PRN_Assignment.Pages
         {
             try
             {
-                var account = await _accountService.Login(email, password);
+                var account = await _accountService.Login(username, password);
 
 
                 if (account != null)
                 {
                     var claims = new List<Claim>
                     {
-                        new Claim(ClaimTypes.Name, account.accountID.ToString()),
+                        new Claim(ClaimTypes.NameIdentifier, account.accountID.ToString()),
                         new Claim(ClaimTypes.Email, account.email),
                         new Claim(ClaimTypes.Role, account.role)
                     };
@@ -43,7 +43,7 @@ namespace PRN_Assignment.Pages
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     var authProperties = new AuthenticationProperties { IsPersistent = true };
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
-                    HttpContext.Session.SetString("Email", email);
+                    HttpContext.Session.SetString("Email", account.email);
                     HttpContext.Session.SetString("UserName", account.userName);
                     HttpContext.Session.SetString("UserId", account.accountID.ToString());
 
@@ -54,7 +54,7 @@ namespace PRN_Assignment.Pages
                         case "staff":
                             return RedirectToPage("/Staff/Index");
                         case "therapist":
-                            return RedirectToPage("/TherapistPage/Index");
+                            return RedirectToPage("/TherapistPage/Schedule");
                         case "admin":
                             return RedirectToPage("/DashboardAndReport/DashboardAndReport");
                         default:
