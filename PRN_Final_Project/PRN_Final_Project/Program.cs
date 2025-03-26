@@ -28,7 +28,13 @@ builder.Services.AddScoped<IPasswordHasher<Account>, PasswordHasher<Account>>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper((Assembly[])AppDomain.CurrentDomain.GetAssemblies());
 // Add session
-builder.Services.AddSession();  
+builder.Services.AddSession(options =>
+{
+    // Set session timeout and other options if needed
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});  
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -44,8 +50,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-//// Use session
-//app.UseSession();
+// Use session
+app.UseSession();
 
 app.UseAuthentication();    
 app.UseAuthorization();
