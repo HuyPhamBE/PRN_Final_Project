@@ -1,251 +1,453 @@
 ﻿@page
 @model PRN_Final_Project.Pages.Staff.IndexModel
 @{
-	ViewData["Title"] = "Booking Management";
+    ViewData["Title"] = "Booking Management";
 }
+<style>
+    .btn-group > form, .btn-group > button, .btn-group > a {
+        margin-right: 5px;
+    }
+
+        .btn-group > form:last-child, .btn-group > button:last-child, .btn-group > a:last-child {
+            margin-right: 0;
+        }
+
+    .table .btn {
+        min-width: 140px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn i {
+        margin-right: 5px;
+    }
+
+    .btn {
+        border-radius: 0.25rem !important;
+    }
+    /* Status Badge Styling */
+    .badge-pending {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    .badge-checkedin {
+        background-color: #17a2b8;
+        color: white;
+    }
+
+    .badge-inprogress {
+        background-color: #ffc107;
+        color: #212529;
+    }
+
+    .badge-completed {
+        background-color: #28a745;
+        color: white;
+    }
+    /* Search input styling */
+    .main-search-input {
+        min-width: 300px;
+    }
+    /* Therapist search styling */
+    #therapistSearchInput {
+        margin-bottom: 10px;
+    }
+</style>
 
 <div class="container-fluid mt-4">
-	<div class="row mb-4">
-		<div class="col-md-6">
-			<h1>Booking Management</h1>
-		</div>
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h1>Booking Management</h1>
+        </div>
+        <div class="col-md-6">
+            <form method="get" class="form-inline justify-content-md-end">
+                <div class="input-group">
+                    <input type="text" name="searchTerm" class="form-control main-search-input" placeholder="Search by Customer, Therapist or Service Name">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-search"></i> Search
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
-		<div class="col-md-6">
-			<form method="get" class="form-inline justify-content-md-end">
-				<div class="input-group">
-					<input type="text" name="searchTerm" class="form-control" placeholder="Search...">
-					<div class="input-group-append">
-						<button type="submit" class="btn btn-primary">
-							<i class="fa fa-search"></i> Search
-						</button>
-					</div>
-				</div>
-			</form>
-		</div>
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Appointment Date</th>
+                            <th>Status</th>
+                            <th>Customer</th>
+                            <th>Service</th>
+                            <th>Assigned Specialist</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Booking)
+                        {
+                            <tr>
+                                <td>
+                                    @item.appointmentDay.ToString("MMM dd, yyyy") <span class="badge badge-light text-dark">@item.Slot?.startTime</span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-@(item.status.ToLower().Replace(" ", ""))">
+                                        @FormatStatus(item.status)
+                                    </span>
+                                </td>
+                                <td>@item.Customer.fullName</td>
+                                <td>@item.Service?.serviceName</td>
+                                <td>
+                                    @if (item.Therapist != null)
+                                    {
+                                        @item.Therapist.fullName
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Not assigned</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        @if (item.status == "pending" && item.appointmentDay.Date == DateTime.Today && item.appointmentDay.TimeOfDay <= DateTime.Now.TimeOfDay)
+                                        {
+                                            <form method="post" asp-page-handler="CheckIn" asp-route-id="@item.BookingID" class="check-in-form">
+                                                <button type="submit" class="btn btn-success btn-sm">
+                                                    <i class="fas fa-check-circle"></i> Check In
+                                                </button>
+                                            </form>
+                                        }
+                                        @if (item.status == "checkedIn" && item.Therapist == null)
+                                        {
+                                            <button class="btn btn-info btn-sm"
+                                                    data-toggle="modal"
+                                                    data-target="#assignModal"
+                                                    data-booking-id="@item.BookingID">
+                                                <i class="fas fa-user-plus"></i> Assign
+                                            </button>
+                                        }
+                                        @if (item.status == "inProgress")
+                                        {
+                                            <form method="post" asp-page-handler="CheckOut" asp-route-id="@item.BookingID" class="check-out-form">
+                                                <button type="submit" class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-sign-out-alt"></i> Check Out
+                                                </button>
+                                            </form>
+                                        }
+                                        <a asp-page="./Details" asp-route-id="@item.BookingID" class="btn btn-secondary btn-sm">
+                                            <i class="fas fa-info-circle"></i> Details
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
 
-	</div>
-
-	@if (TempData["Error"] != null)
-	{
-		<div class="alert alert-danger alert-dismissible fade show">
-			@TempData["Error"]
-			<button type="button" class="close" data-dismiss="alert">&times;</button>
-		</div>
-	}
-	@if (TempData["Success"] != null)
-	{
-		<div class="alert alert-success alert-dismissible fade show">
-			@TempData["Success"]
-			<button type="button" class="close" data-dismiss="alert">&times;</button>
-		</div>
-	}
-
-	<div class="card shadow">
-		<div class="card-body">
-			<div class="table-responsive">
-				<table class="table table-hover">
-					<thead class="thead-dark">
-						<tr>
-							<th>Appointment Date</th>
-							<th>Status</th>
-							<th>Customer</th>
-							<th>Service</th>
-							<th>Assigned Specialist</th>
-							<th>Actions</th>
-						</tr>
-					</thead>
-					<tbody>
-						@foreach (var item in Model.Booking)
-						{
-							<tr>
-								<td>@item.appointmentDay.ToString("MMM dd, yyyy") <span class="badge badge-light">@item.Slot?.startTime</span></td>
-								<td>
-									<span class=" @GetStatusBadgeClass(item.status)">
-										@item.status
-									</span>
-								</td>
-								<td>@item.Customer.fullName</td>
-								<td>@item.Service?.serviceName</td>
-								<td>
-									@if (item.Therapist != null)
-									{
-										@item.Therapist.fullName
-									}
-									else
-									{
-										<span class="text-muted">Not assigned</span>
-									}
-								</td>
-								<td>
-									<div class="btn-group" role="group">
-										@if (item.status == "pending")
-										{
-											<form method="post" asp-page-handler="CheckIn" asp-route-id="@item.BookingID">
-												<button type="submit" class="btn btn-success btn-sm">
-													<i class="fas fa-check-circle"></i> Check In
-												</button>
-											</form>
-										}
-										@if (item.status == "checkedIn" && item.Therapist == null)
-										{
-											<button class="btn btn-info btn-sm"
-													data-toggle="modal"
-													data-target="#assignModal"
-													data-booking-id="@item.BookingID">
-												<i class="fas fa-user-plus"></i> Assign Specialist
-											</button>
-										}
-										@if (item.status == "inProgress")
-										{
-											<form method="post" asp-page-handler="CheckOut" asp-route-id="@item.BookingID">
-												<button type="submit" class="btn btn-primary btn-sm">
-													<i class="fas fa-sign-out-alt"></i> Check Out
-												</button>
-											</form>
-										}
-										<a asp-page="./Details" asp-route-id="@item.BookingID" class="btn btn-secondary btn-sm">
-											<i class="fas fa-info-circle"></i> Details
-										</a>
-									</div>
-								</td>
-							</tr>
-						}
-					</tbody>
-				</table>
-			</div>
-
-			<ul class="pagination">
-				@for (var i = 1; i <= Model.TotalPages; i++)
-				{
-					<li class="page-item @(i == Model.PageIndex ? "active" : "")">
-						<a class="page-link" asp-route-pageIndex="@i">@i</a>
-					</li>
-				}
-			</ul>
-		</div>
-	</div>
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(Model.PageIndex == 1 ? "disabled" : "")">
+                    <a class="page-link" asp-route-pageIndex="@(Model.PageIndex - 1)" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                @for (var i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                        <a class="page-link" asp-route-pageIndex="@i">@i</a>
+                    </li>
+                }
+                <li class="page-item @(Model.PageIndex == Model.TotalPages ? "disabled" : "")">
+                    <a class="page-link" asp-route-pageIndex="@(Model.PageIndex + 1)" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
 
 <!-- Assign Specialist Modal -->
 <div class="modal fade" id="assignModal" tabindex="-1">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title"><i class="fas fa-user-md"></i> Assign Specialist</h5>
-				<button type="button" class="close" data-dismiss="modal">
-					<span>&times;</span>
-				</button>
-			</div>
-			<form method="post" asp-page-handler="AssignSpecialist">
-				<div class="modal-body">
-					<input type="hidden" name="bookingId" id="modalBookingId" />
-					<div class="form-group">
-						<label><i class="fas fa-user"></i> Select Specialist:</label>
-						<div id="therapistLoadingSpinner" class="text-center">
-							<div class="spinner-border text-primary" role="status">
-								<span class="sr-only">Loading...</span>
-							</div>
-							<p>Loading available specialists...</p>
-						</div>
-						<select name="therapistId" id="therapistSelect" class="form-control" style="display: none;">
-							<option value="">-- Select Specialist --</option>
-						</select>
-						<div id="noTherapistsMessage" class="alert alert-warning mt-2" style="display: none;">
-							No specialists are available for this time slot.
-						</div>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">
-						<i class="fas fa-times"></i> Close
-					</button>
-					<button type="submit" class="btn btn-primary">
-						<i class="fas fa-check"></i> Assign
-					</button>
-				</div>
-			</form>
-		</div>
-	</div>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-user-md"></i> Assign Specialist</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <form method="post" asp-page-handler="AssignSpecialist" id="assignSpecialistForm">
+                <div class="modal-body">
+                    <input type="hidden" name="bookingId" id="modalBookingId" />
+                    <div class="form-group">
+                        <label><i class="fas fa-search"></i> Search Specialists:</label>
+                        <input type="text" id="therapistSearchInput" class="form-control" placeholder="Search by name">
+                        <div id="therapistLoadingSpinner" class="text-center">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            <p>Loading available specialists...</p>
+                        </div>
+                        <select name="therapistId" id="therapistSelect" class="form-control" style="display: none;" size="5">
+                        </select>
+                        <div id="noTherapistsMessage" class="alert alert-warning mt-2" style="display: none;">
+                            No specialists are available for this time slot.
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-check"></i> Assign
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
-
 @section Scripts {
-	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-	<script>
-			   // Replace your existing modal script with this updated version
-		$('#assignModal').on('show.bs.modal', function (event) {
-			var button = $(event.relatedTarget);
-			var bookingId = button.data('booking-id');
-			$('#modalBookingId').val(bookingId);
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Function to show SweetAlert
+        function showAlert(type, title, text) {
+            Swal.fire({
+                icon: type,
+                title: title,
+                text: text,
+                showConfirmButton: true,
+                timer: type === 'success' ? 2000 : null
+            });
+        }
 
-			// Show loading spinner, hide select and messages
-			$('#therapistLoadingSpinner').show();
-			$('#therapistSelect').hide();
-			$('#noTherapistsMessage').hide();
+        // Check if there are any success or error messages from TempData
+        @if (TempData["Success"] != null)
+        {
+            <text>
+                    $(document).ready(function() {
+                        showAlert('success', 'Success', '@TempData["Success"]');
+                    });
+            </text>
+        }
 
-			// Clear previous options except the default one
-			$('#therapistSelect option:not(:first)').remove();
+        @if (TempData["Error"] != null)
+        {
+            <text>
+                    $(document).ready(function() {
+                        showAlert('error', 'Error', '@TempData["Error"]');
+                    });
+            </text>
+        }
 
-			// Fetch available therapists for this booking
-			$.ajax({
-				url: '?handler=AvailableTherapists',
-				data: { bookingId: bookingId },
-				headers: {
-					"RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
-				},
-				success: function(therapists) {
-					// Hide loading spinner
-					$('#therapistLoadingSpinner').hide();
+        // Assign Specialist Modal Script
+        $('#assignModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var bookingId = button.data('booking-id');
+            $('#modalBookingId').val(bookingId);
 
-					if (therapists && therapists.length > 0) {
-						// Add therapists to select dropdown
-						$.each(therapists, function(i, therapist) {
-							$('#therapistSelect').append($('<option>', {
-								value: therapist.value,
-								text: therapist.text
-							}));
-						});
+            // Show loading spinner, hide select and messages
+            $('#therapistLoadingSpinner').show();
+            $('#therapistSelect').hide();
+            $('#noTherapistsMessage').hide();
 
-						// Show the select dropdown
-						$('#therapistSelect').show();
-					} else {
-						// Show no therapists message
-						$('#noTherapistsMessage').show();
-					}
-				},
-				error: function() {
-					// Hide loading spinner
-					$('#therapistLoadingSpinner').hide();
+            // Clear previous options
+            $('#therapistSelect').empty();
 
-					// Show error message
-					$('#noTherapistsMessage').text('Error loading available specialists. Please try again.').show();
-				}
-			});
-		});
-	</script>
+            // Unbind any previous keyup event handler to avoid duplicate bindings
+            $('#therapistSearchInput').off('keyup');
+
+            // Fetch available therapists for this booking
+            $.ajax({
+                url: '?handler=AvailableTherapists',
+                data: { bookingId: bookingId },
+                headers: {
+                    "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function(therapists) {
+                    // Hide loading spinner
+                    $('#therapistLoadingSpinner').hide();
+
+                    if (therapists && therapists.length > 0) {
+                        // Add therapists to select dropdown
+                        $.each(therapists, function(i, therapist) {
+                            $('#therapistSelect').append($('<option>', {
+                                value: therapist.value,
+                                text: therapist.text
+                            }));
+                        });
+
+                        // Show the select dropdown
+                        $('#therapistSelect').show();
+
+                        // Bind search functionality only once
+                        $('#therapistSearchInput').on('keyup', function() {
+                            var searchTerm = $(this).val().toLowerCase();
+                            $('#therapistSelect option').each(function() {
+                                var optionText = $(this).text().toLowerCase();
+                                $(this).toggle(optionText.includes(searchTerm));
+                            });
+                        });
+                    } else {
+                        // Show no therapists message
+                        $('#noTherapistsMessage').show();
+                    }
+                },
+                error: function() {
+                    // Hide loading spinner
+                    $('#therapistLoadingSpinner').hide();
+
+                    // Show error message
+                    $('#noTherapistsMessage').text('Error loading available specialists. Please try again.').show();
+                }
+            });
+        });
+
+        // Form submission handling with SweetAlert confirmation
+        $(document).ready(function() {
+            // Check In Form
+            $('.check-in-form').on('submit', function(e) {
+                e.preventDefault();
+                var form = $(this);
+                Swal.fire({
+                    title: 'Check In Booking',
+                    text: 'Are you sure you want to check in this booking?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, Check In'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: 'POST',
+                            url: form.attr('action'),
+                            data: form.serialize(),
+                            success: function(response) {
+                                showAlert('success', 'Checked In', 'Booking has been successfully checked in.');
+                                setTimeout(() => location.reload(), 2000);
+                            },
+                            error: function(xhr) {
+                                showAlert('error', 'Check In Failed', xhr.responseText || 'An error occurred while checking in.');
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Check Out Form
+            $('.check-out-form').on('submit', function(e) {
+                e.preventDefault();
+                var form = $(this);
+                Swal.fire({
+                    title: 'Check Out Booking',
+                    text: 'Are you sure you want to check out this booking?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#007bff',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, Check Out'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: 'POST',
+                            url: form.attr('action'),
+                            data: form.serialize(),
+                            success: function(response) {
+                                showAlert('success', 'Checked Out', 'Booking has been successfully checked out.');
+                                setTimeout(() => location.reload(), 2000);
+                            },
+                            error: function(xhr) {
+                                showAlert('error', 'Check Out Failed', xhr.responseText || 'An error occurred while checking out.');
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Assign Specialist Form
+            $('#assignSpecialistForm').on('submit', function(e) {
+                e.preventDefault();
+                var form = $(this);
+                if (!$('#therapistSelect').val()) {
+                    showAlert('error', 'Selection Required', 'Please select a specialist before assigning.');
+                    return;
+                }
+                Swal.fire({
+                    title: 'Assign Specialist',
+                    text: 'Are you sure you want to assign this specialist?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#17a2b8',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, Assign'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: 'POST',
+                            url: form.attr('action'),
+                            data: form.serialize(),
+                            success: function(response) {
+                                showAlert('success', 'Specialist Assigned', 'Specialist has been successfully assigned.');
+                                $('#assignModal').modal('hide');
+                                setTimeout(() => location.reload(), 2000);
+                            },
+                            error: function(xhr) {
+                                showAlert('error', 'Assignment Failed', xhr.responseText || 'An error occurred while assigning the specialist.');
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 }
 
 @functions {
-	string GetStatusBadgeClass(string status)
-	{
-		// Normalize the status value
-		var normalizedStatus = status?.Trim()
-			.ToLower()
-			.Replace(" ", "")
-			.Replace("-", "")
-			.Replace("_", "");
+    string GetStatusBadgeClass(string status)
+    {
+        // This function is no longer used due to CSS classes
+        return string.Empty;
+    }
 
-		return normalizedStatus switch
-		{
-			"pending" => "badge-secondary",
-			"checkedin" => "badge-info",
-			"inprogress" => "badge-warning",
-			"completed" => "badge-success",
-			_ => "badge-light"
-		};
-	}
+    // Helper to format status text from, for example, "checkedIn" to "checked in"
+    string FormatStatus(string status)
+    {
+        if (string.IsNullOrWhiteSpace(status))
+            return status;
+        // Insert a space before each uppercase letter (except the first character)
+        return System.Text.RegularExpressions.Regex.Replace(status, "(?<!^)([A-Z])", " $1");
+    }
 }
+
 @Html.AntiForgeryToken()
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.9/signalr.min.js"></script>
+<script type="text/javascript">
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/Hub")
+        .build();
+    connection.on("ReceiveBookingUpdate", function (bookingId, status) {
+        console.log(`Booking ID: ${bookingId}, Status: ${status}`);
+    });
+    connection.start().catch(function (err) {
+        return console.error(err.toString());
+    });
+</script>

@@ -1,7 +1,9 @@
 using Entities.IUOW;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using PRN_Assignment;
+using PRN_Final_Project.Hubs;
 using Repositories.DB;
 using Repositories.Entities;
 using Services.Interface;
@@ -40,6 +42,8 @@ builder.Services.AddScoped<ITherapistService, TherapistService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<ITherapistResultService, TherapistResultService>();
 
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -50,6 +54,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.MapHub <BookingHub> ("/Hub");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -64,3 +69,6 @@ app.UseAuthorization();
 app.MapRazorPages();
 
 app.Run();
+
+
+

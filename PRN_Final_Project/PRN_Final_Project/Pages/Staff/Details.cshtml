@@ -2,228 +2,235 @@
 @model PRN_Final_Project.Pages.Staff.DetailsModel
 
 @{
-	ViewData["Title"] = "Booking Details";
+    ViewData["Title"] = "Booking Details";
 }
 
-<div class="container mt-4">
-	<div class="d-flex justify-content-between align-items-center mb-4">
-		<h1 class="display-4 font-weight-bold text-primary">
-			<i class="fas fa-calendar-check mr-2"></i>Booking Details
-		</h1>
-		<a asp-page="./Index" class="btn btn-outline-primary">
-			<i class="fas fa-arrow-left mr-2"></i>Back to List
-		</a>
-	</div>
+<div class="container-fluid px-4 py-4">
+    <div class="row mb-4 align-items-center">
+        <div class="col-12 col-md-6">
+            <h1 class="h2 text-gray-800 mb-0">
+                <i class="fas fa-calendar-check me-2"></i> Booking Details
+            </h1>
+        </div>
+        <div class="col-12 col-md-6 text-end">
+            <a asp-page="./Index" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to List
+            </a>
+        </div>
+    </div>
 
-	<div class="card shadow-lg border-0">
-		<div class="card-header bg-primary text-white py-3">
-			<h3 class="mb-0">
-				<i class="fas fa-receipt mr-2"></i>
-				Booking #@Model.Booking.BookingID.ToString().Substring(0, 8).ToUpper()
-			</h3>
-		</div>
+    <!-- Booking Summary Section -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body p-4">
+            <div class="row g-4">
+                <div class="col-12 col-md-4">
+                    <div class=" p-3 rounded-3">
+                        <h5 class="text-muted mb-1">Appointment Time</h5>
+                        <p class="h4 mb-0">
+                            @Model.Booking.appointmentDay.ToString("dd MMMM yyyy")
+                            <br>
+                            <small class="text-muted">
+                                @if (Model.Booking.Slot != null)
+                                {
+                                    @Model.Booking.Slot.startTime.ToString(@"hh\:mm")
+                                    <span class="mx-2 text-primary">→</span>
+                                    @Model.Booking.Slot.endTime.ToString(@"hh\:mm")
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning">Time not scheduled</span>
+                                }
+                            </small>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="p-3 rounded-3">
+                        <h5 class="text-muted mb-1">Current Status</h5>
+                        <span class="badge @GetStatusBadge(Model.Booking.status) py-2 px-3">
+                            @Model.Booking.status?.ToUpper()
+                        </span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="p-3 rounded-3">
+                        <h5 class="text-muted mb-3">Payment Details</h5>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted">Total Amount:</span>
+                            <span class="h5 text-success mb-0">@($"{Model.Booking.total:N0} VNĐ")</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted">Deposit Paid:</span>
+                            <span class="h5 text-info mb-0">@($"{Model.Booking.deposit:N0} VNĐ")</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-		<div class="card-body">
-			<div class="row">
-				<!-- Left Column -->
-				<div class="col-md-6">
-					<div class="detail-item mb-4">
-						<div class="icon-circle bg-info">
-							<i class="fas fa-clock text-white"></i>
-						</div>
-						<div>
-							<h5 class="text-secondary">Appointment Time</h5>
-							<p class="h4 text-dark">
-								@Model.Booking.appointmentDay.ToString("dd MMMM yyyy")
-								<br>
-								<span class="text-muted">
-									@if (Model.Booking.Slot != null)
-									{
-										@Model.Booking.Slot.startTime.ToString(@"hh\:mm")
-										<i class="fas fa-arrow-right mx-2 text-primary"></i>
-										@Model.Booking.Slot.endTime.ToString(@"hh\:mm")
-									}
-									else
-									{
-										<span class="badge badge-warning">Time not scheduled</span>
-									}
+    <!-- Combined Customer & Specialist Details Section -->
+    <div class="row mb-4">
+        <!-- Customer Details -->
+        <div class="col-12 col-md-6">
+            <div class="bg-soft-success p-3 rounded-3">
+                <h5 class="text-muted mb-3">
+                    <i class="fas fa-user-tag me-2"></i>Customer Details
+                </h5>
+                <div class="row align-items-center">
+                    <div class="col-12 col-md-4 text-center">
+                        <img src="@(Model.Booking.Customer?.imageUrl ?? "/api/placeholder/150/150")"
+                             alt="Customer Avatar"
+                             class="img-fluid rounded-circle shadow-sm mb-3"
+                             style="width: 150px; height: 150px; object-fit: cover;">
+                    </div>
+                    <div class="col-12 col-md-8">
+                        <div class="mb-2">
+                            <strong class="text-muted">Full Name:</strong>
+                            <p class="h5 mb-1">@(Model.Booking.Customer?.fullName ?? "No customer assigned")</p>
+                        </div>
+                        <div class="mb-2">
+                            <strong class="text-muted">Phone:</strong>
+                            <p class="mb-1">@(Model.Booking.Customer?.phone ?? "N/A")</p>
+                        </div>
+                        <div class="mb-2">
+                            <strong class="text-muted">Gender:</strong>
+                            <p class="mb-1">
+                                @(Model.Booking.Customer?.gender == true ? "Male" :
+                                    Model.Booking.Customer?.gender == false ? "Female" : "Other")
+                            </p>
+                        </div>
+                        <div class="mb-2">
+                            <strong class="text-muted">Date of Birth:</strong>
+                            <p class="mb-1">
+                                @(Model.Booking.Customer?.dob.ToString("dd MMMM yyyy") ?? "N/A")
+                            </p>
+                        </div>
+                        <div>
+                            <strong class="text-muted">Address:</strong>
+                            <p class="mb-1">@(Model.Booking.Customer?.address ?? "N/A")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Specialist Details -->
+        <div class="col-12 col-md-6">
+            <div class="bg-white p-3 rounded-3 shadow-sm">
+                <h5 class="text-muted mb-3">
+                    <i class="fas fa-user-md me-2"></i>Specialist Details
+                </h5>
+                @if (Model.Booking.Therapist != null)
+                {
+                    <div class="row align-items-center">
+                        <div class="col-12 col-md-4 text-center">
+                            <img src="@(Model.Booking.Therapist.imageUrl ?? "/api/placeholder/150/150")"
+                                 alt="Therapist Avatar"
+                                 class="img-fluid rounded-circle shadow-sm mb-3"
+                                 style="width: 150px; height: 150px; object-fit: cover;">
+                        </div>
+                        <div class="col-12 col-md-8">
+                            <h5 class="mb-2">@Model.Booking.Therapist.fullName</h5>
+                            <p class="text-muted mb-2">@(Model.Booking.Therapist.major ?? "General Therapist")</p>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-danger">No therapist assigned</p>
+                }
+            </div>
+        </div>
+    </div>
 
-								</span>
-							</p>
-						</div>
-					</div>
-
-					<div class="detail-item mb-4">
-						<div class="icon-circle bg-success">
-							<i class="fas fa-user-tag text-white"></i>
-						</div>
-						<div>
-							<h5 class="text-secondary">Customer Details</h5>
-							<p class="h5">
-								@(Model.Booking.Customer?.fullName ?? "No customer assigned")
-								<br>
-								<small class="text-muted">Customer ID: @Model.Booking.cusID</small>
-							</p>
-						</div>
-					</div>
-				</div>
-
-				<!-- Right Column -->
-				<div class="col-md-6">
-					<div class="status-card mb-4">
-						<div class="icon-circle @GetStatusBackground(Model.Booking.status)">
-							<i class="fas fa-tag text-white"></i>
-						</div>
-						<div>
-							<h5 class="text-secondary">Current Status</h5>
-							<span class="badge @GetStatusBadge(Model.Booking.status) py-2 px-3">
-								@Model.Booking.status?.ToUpper()
-							</span>
-						</div>
-					</div>
-
-					<div class="pricing-card p-4 mb-4 bg-light rounded">
-						<h5 class="text-secondary mb-3">
-							<i class="fas fa-money-bill-wave mr-2"></i>Payment Details
-						</h5>
-						<div class="d-flex justify-content-between align-items-center mb-2">
-							<span class="h6">Total Amount:</span>
-							<span class="h4 text-success">@Model.Booking.total.ToString("C")</span>
-						</div>
-						<div class="d-flex justify-content-between align-items-center">
-							<span class="h6">Deposit Paid:</span>
-							<span class="h5 text-info">@Model.Booking.deposit.ToString("C")</span>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<!-- Additional Details Section -->
-			<div class="row mt-4">
-				<div class="col-md-4">
-					<div class="info-box bg-white p-3 rounded shadow-sm">
-						<h6 class="text-muted text-uppercase">
-							<i class="fas fa-user-md mr-2"></i>Specialist
-						</h6>
-						<p class="h5">
-							@if (Model.Booking.Therapist != null)
-							{
-								@Model.Booking.Therapist.fullName
-								<br>
-								<small class="text-muted">ID: @Model.Booking.theraID</small>
-							}
-							else
-							{
-								<span class="text-danger">Not assigned</span>
-							}
-						</p>
-					</div>
-				</div>
-
-				<div class="col-md-4">
-					<div class="info-box bg-white p-3 rounded shadow-sm">
-						<h6 class="text-muted text-uppercase">
-							<i class="fas fa-spa mr-2"></i>Service
-						</h6>
-						<p class="h5">
-							@(Model.Booking.Service?.serviceName ?? "No service selected")
-							@if (Model.Booking.Service != null)
-							{
-								<br>
-								<small class="text-muted">Duration: 60 mins</small>
-							}
-						</p>
-					</div>
-				</div>
-
-				<div class="col-md-4">
-					<div class="info-box bg-white p-3 rounded shadow-sm">
-						<h6 class="text-muted text-uppercase">
-							<i class="fas fa-history mr-2"></i>Timestamps
-						</h6>
-						<div class="small">
-							<div class="d-flex justify-content-between">
-								<span>Created:</span>
-								<span>@Model.Booking.createdAt.ToString("g")</span>
-							</div>
-							<div class="d-flex justify-content-between">
-								<span>Last Updated:</span>
-								<span>@Model.Booking.updatedAt.ToString("g")</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+    <!-- Service and Timestamps Section -->
+    <div class="row g-4">
+        <div class="col-12 col-md-6">
+            <div class="bg-white p-3 rounded-3 shadow-sm">
+                <h6 class="text-muted text-uppercase mb-3">
+                    <i class="fas fa-spa me-2"></i>Service
+                </h6>
+                <p class="h5 mb-2">
+                    @(Model.Booking.Service?.serviceName ?? "No service selected")
+                </p>
+                @if (Model.Booking.Service != null)
+                {
+                    <div>
+                        <strong class="text-muted">Description:</strong>
+                        <p class="mb-0">@(Model.Booking.Service.description ?? "No description")</p>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="bg-white p-3 rounded-3 shadow-sm">
+                <h6 class="text-muted text-uppercase mb-3">
+                    <i class="fas fa-history me-2"></i>Timestamps
+                </h6>
+                <div class="small">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Created:</span>
+                        <span>@Model.Booking.createdAt.ToString("g")</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted">Last Updated:</span>
+                        <span>@Model.Booking.updatedAt.ToString("g")</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Styles {
-	<style>
-		.icon-circle {
-			width: 50px;
-			height: 50px;
-			border-radius: 50%;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			margin-right: 1rem;
-		}
+    <style>
+        /* Soft background colors */
+        .bg-soft-primary {
+            background-color: rgba(13, 110, 253, 0.1);
+        }
 
-		.detail-item {
-			display: flex;
-			align-items: center;
-			padding: 1rem;
-			background: #f8f9fa;
-			border-radius: 10px;
-			transition: transform 0.2s;
-		}
+        .bg-soft-success {
+            background-color: rgba(25, 135, 84, 0.1);
+        }
 
-			.detail-item:hover {
-				transform: translateY(-2px);
-				box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-			}
+        .bg-soft-info {
+            background-color: rgba(13, 202, 240, 0.1);
+        }
+        /* Status badges */
+        .badge-pending {
+            background-color: #ffc107;
+            color: #212529;
+        }
 
-		.status-card {
-			display: flex;
-			align-items: center;
-			padding: 1.5rem;
-			background: #fff;
-			border-radius: 10px;
-			border-left: 4px solid;
-		}
+        .badge-checkedin {
+            background-color: #007bff;
+        }
 
-		.badge {
-			font-size: 0.9rem;
-			letter-spacing: 0.5px;
-		}
-	</style>
+        .badge-inprogress {
+            background-color: #17a2b8;
+        }
+
+        .badge-completed {
+            background-color: #28a745;
+        }
+
+        .badge-danger {
+            background-color: #dc3545;
+        }
+    </style>
 }
 
 @functions {
-	string GetStatusBadge(string status)
-	{
-		return status?.ToLower() switch
-		{
-			"pending" => "badge-warning",
-			"confirmed" => "badge-primary",
-			"in-progress" => "badge-info",
-			"completed" => "badge-success",
-			"cancelled" => "badge-danger",
-			_ => "badge-secondary"
-		};
-	}
-
-	string GetStatusBackground(string status)
-	{
-		return status?.ToLower() switch
-		{
-			"pending" => "bg-warning",
-			"confirmed" => "bg-primary",
-			"in-progress" => "bg-info",
-			"completed" => "bg-success",
-			"cancelled" => "bg-danger",
-			_ => "bg-secondary"
-		};
-	}
+    string GetStatusBadge(string status)
+    {
+        return status?.Trim().ToLower() switch
+        {
+            "pending" => "badge-pending",
+            "checkedin" => "badge-checkedin",
+            "in-progress" => "badge-inprogress",
+            "completed" => "badge-completed",
+            "cancelled" => "badge-danger",
+            _ => "badge-secondary"
+        };
+    }
 }
