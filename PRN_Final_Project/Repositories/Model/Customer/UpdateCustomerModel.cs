@@ -15,5 +15,6 @@ namespace Repositories.Model.Customer
         public DateTime dob { get; set; }
         public bool gender { get; set; }
         public string imageUrl { get; set; }
+        public Guid accountID { get; set; }
     }
 }

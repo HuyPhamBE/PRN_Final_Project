@@ -1,13 +1,12 @@
 ﻿@page
 @model PRN_Final_Project.Pages.CustomerManage.EditModel
-
+@inject Services.Interface.ICustomerService CustomerService
 @{
     ViewData["Title"] = "Edit";
-    Layout = "~/Pages/Shared/_Layout.cshtml";
+    Layout = "~/Pages/Shared/_Layout.cshtml";    
 }
-
 <h1>Edit</h1>
-
+<h1>@Model.acc</h1>
 <h4>Customer</h4>
 <hr />
 <div class="row">

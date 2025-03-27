@@ -21,12 +21,12 @@ namespace PRN_Final_Project.Pages.TherapistPage
             _therapistService = therapistService;
         }
 
-        //public async Task<IActionResult> OnGetAsync()
-        //{
-        //    var accounts = await _accountService.GetAllAccountsAsync();
-        //    ViewData["accountID"] = new SelectList(accounts, "accountID", "email");
-        //    return Page();
-        //}
+        public async Task<IActionResult> OnGetAsync()
+        {
+            var accounts = await _accountService.GetAllAccount();
+            ViewData["accountID"] = new SelectList(accounts, "accountID", "email");
+            return Page();
+        }
 
         [BindProperty]
         public Therapist Therapist { get; set; } = default!;

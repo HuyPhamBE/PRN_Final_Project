@@ -78,23 +78,13 @@ namespace Services.Services
             return _mapper.Map<List<CustomerServiceModel>>(customers);
         }
 
-        public async Task UpdateCustomer(UpdateCustomerModel model, string id)
+        public async Task UpdateCustomer(UpdateCustomerModel model, Guid id)
         {
             var customer = await _unitOfWork.GetRepository<Customer>()
                 .Entities
-                .FirstOrDefaultAsync(c => c.cusID.ToString() == id);
-            _mapper.Map(model, customer);
-            try
-            {
-                _unitOfWork.BeginTransaction();
+                .FirstOrDefaultAsync(c => c.cusID == id);
+            customer = _mapper.Map<Customer>(model);
                 await _unitOfWork.GetRepository<Customer>().UpdateAsync(customer);
-                _unitOfWork.CommitTransaction();
-            }
-            catch (Exception ex)
-            {
-                _unitOfWork.RollBack();
-                Console.WriteLine(ex.Message);
-            }
             await _unitOfWork.SaveAsync();
         }     
 
