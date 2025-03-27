@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using PRN_Assignment.Pages;
+using PRN_Final_Project.Hubs;
 using Repositories.DB;
 using Repositories.Entities;
 using Services.Interface;
@@ -18,11 +20,14 @@ namespace PRN_Final_Project.Pages.Staff
     {
         private readonly IBookingService _bookingService;
         private readonly ITherapistService _therapistService;
+        private readonly IHubContext<BookingHub> _hubContext;
 
-        public IndexModel(IBookingService bookingService, ITherapistService therapistService)
+        [ActivatorUtilitiesConstructor]
+        public IndexModel(IBookingService bookingService, ITherapistService therapistService, IHubContext<BookingHub> hubContext)
         {
             _bookingService = bookingService;
             _therapistService = therapistService;
+            _hubContext = hubContext;
         }
 
         // Pagination properties
@@ -39,7 +44,6 @@ namespace PRN_Final_Project.Pages.Staff
         public IList<Therapist> Therapist { get; set; } = default!;
 
         public SelectList Therapists { get; set; }
-        //public SelectList Therapists { get; set; }
 
         public async Task OnGetAsync(int pageIndex = 1)
         {
@@ -47,9 +51,9 @@ namespace PRN_Final_Project.Pages.Staff
 
             Console.WriteLine($"Retrieved {result.Bookings?.Count ?? 0} bookings");
 
+
+
             //Therapists = new SelectList(await _therapistService.GetAllTherapists(), "theraID", "fullName");
-
-
 
             Booking = result.Bookings;
             PageIndex = result.PageIndex;
@@ -88,6 +92,7 @@ namespace PRN_Final_Project.Pages.Staff
                     });
                 }
             }
+            Console.WriteLine(availableTherapists);
 
             return new JsonResult(availableTherapists);
         }
@@ -97,17 +102,17 @@ namespace PRN_Final_Project.Pages.Staff
             var booking = await _bookingService.GetBookingByID(id);
             if (booking != null)
             {
-                if (booking.theraID == null)
+                if (booking.appointmentDay.Date != DateTime.Today.Date)
                 {
-                    booking.status = "checkedIn";
-                }
-                else
-                {
-                    booking.status = "inProgress";
+                    TempData["Error"] = "Cannot check in - appointment date is not today";
+                    return RedirectToPage();
                 }
 
+                booking.status = booking.theraID == null ? "checkedIn" : "inProgress";
                 booking.updatedAt = DateTime.UtcNow;
                 await _bookingService.UpdateBooking(booking);
+
+                await _hubContext.Clients.All.SendAsync("ReceiveBookingUpdate", $"Booking {id} status updated to {booking.status}.");
             }
             return RedirectToPage();
         }
