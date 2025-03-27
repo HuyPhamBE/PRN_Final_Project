@@ -26,23 +26,23 @@ builder.Configuration
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddEnvironmentVariables();
 builder.Services.AddRazorPages();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IBookingService, BookingService>();
-builder.Services.AddScoped<ITherapistService, TherapistService>();
-
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IPasswordHasher<Account>, PasswordHasher<Account>>();
-builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper((Assembly[])AppDomain.CurrentDomain.GetAssemblies());
-//// Add session
-//builder.Services.AddSession();  
 builder.Services.AddScoped<ITherapistService, TherapistService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<ITherapistResultService, TherapistResultService>();
 
 builder.Services.AddSignalR();
+
+// Add session
+builder.Services.AddSession(options =>
+{
+    // Set session timeout and other options if needed
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});  
 
 var app = builder.Build();
 
@@ -60,8 +60,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-//// Use session
-//app.UseSession();
+// Use session
+app.UseSession();
 
 app.UseAuthentication();    
 app.UseAuthorization();

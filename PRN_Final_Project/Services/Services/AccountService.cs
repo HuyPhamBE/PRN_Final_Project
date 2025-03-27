@@ -8,7 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity; 
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 
 
 namespace Services.Services
@@ -17,11 +18,14 @@ namespace Services.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IPasswordHasher<Account> _passwordHasher;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public AccountService(IUnitOfWork unitOfWork, IPasswordHasher<Account> passwordHasher)
+        public AccountService(IUnitOfWork unitOfWork, IPasswordHasher<Account> passwordHasher,
+            IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _passwordHasher = passwordHasher;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Account> register(Account account, Customer customer)
@@ -30,6 +34,7 @@ namespace Services.Services
             var customerRepository = _unitOfWork.GetRepository<Customer>();
 
             var existingAccount = await repository.FirstorDefaultAsync(acc => acc.userName == account.userName || acc.email == account.email);
+
             if (existingAccount != null)
             {
                 throw new Exception("Username or Email already exists!");
@@ -52,8 +57,7 @@ namespace Services.Services
             var user = await repository.FirstorDefaultAsync(acc => acc.userName == username);
             if (user == null) return null;
 
-            var result = _passwordHasher.VerifyHashedPassword(user, user.password, password);
-
+            var result = _passwordHasher.VerifyHashedPassword(user, user.password, password);            
             return result == PasswordVerificationResult.Success ? user : null;
         }
         public async Task<IList<Account>> GetAllAccount()

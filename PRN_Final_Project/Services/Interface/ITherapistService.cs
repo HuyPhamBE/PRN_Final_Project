@@ -14,17 +14,19 @@ namespace Services.Interface
         Task<IList<Therapist>> GetAll();
         Task<int> GetCountActiveTherapist();
         Task<Therapist?> GetTherapistById(Guid theraID);
-        Task<Therapist> CreateTherapistAsync(Therapist therapist);
+        public Task<Therapist> CreateTherapistWithAccountAsync(Account account, Therapist therapist);
 
         Task<Therapist> UpdateTherapistAsync(Guid theraId);
 
         Task<Therapist> GetTherapistByTheraIdAsync(Guid theraId);
 
-        Task<bool> DeleteTherapistAsync(int id);
+        Task<bool> DeleteTherapistAsync(Guid id);
 
         Task<bool> UpdateStatusActiveTheraAsync(int id);
         Task ToggleTherapistStatus(Guid id);
         Task UpdateTherapist(Therapist therapist);
         Task<List<Therapist>> GetAllTherapists();
+        Task<Therapist> GetTherapistByAccountId(Guid accountId);
+
     }
 }

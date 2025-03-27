@@ -7,36 +7,29 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Repositories.DB;
 using Repositories.Entities;
+using Services.Interface;
 
 namespace PRN_Final_Project.Pages.BookingPage
 {
     public class DetailsModel : PageModel
     {
-        private readonly Repositories.DB.ApplicationDbContext _context;
+        private readonly IBookingService bookingService;
 
-        public DetailsModel(Repositories.DB.ApplicationDbContext context)
+        public DetailsModel(IBookingService bookingService)
         {
-            _context = context;
+            this.bookingService = bookingService;
         }
 
         public Booking Booking { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(Guid? id)
+        public async Task<IActionResult> OnGetAsync(Guid id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var booking = await _context.Bookings.FirstOrDefaultAsync(m => m.BookingID == id);
-            if (booking == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                Booking = booking;
-            }
+            Booking = await bookingService.GetBookingByID(id);
             return Page();
         }
     }

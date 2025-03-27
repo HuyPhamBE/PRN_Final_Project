@@ -29,7 +29,7 @@ namespace Services.Services
             await unitOfWork.SaveAsync();
         }
 
-        public async Task DeleteSlot(string id)
+        public async Task DeleteSlot(Guid id)
         {
             await unitOfWork.GetRepository<Slot>().DeleteAsync(id);
             await unitOfWork.SaveAsync();
@@ -41,7 +41,7 @@ namespace Services.Services
             return mapper.Map<IList<SlotServiceModel>>(Slots);
         }
 
-        public async Task<SlotServiceModel> GetSlotAsyncById(string id)
+        public async Task<SlotServiceModel> GetSlotAsyncById(Guid id)
         {
             var slot = await unitOfWork.GetRepository<Slot>().GetByIdAsync(id);
             return mapper.Map<SlotServiceModel>(slot);

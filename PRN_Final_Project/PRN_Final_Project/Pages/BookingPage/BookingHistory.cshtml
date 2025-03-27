@@ -1,0 +1,73 @@
+﻿@page
+@model PRN_Final_Project.Pages.BookingPage.BookingHistoryModel
+@{
+}
+<h1>Bookings History</h1>
+<table class="table">
+    @if(Model.Bookings != null && Model.Bookings.Any())
+    {
+       <thead>
+	   <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Bookings[0].appointmentDay)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bookings[0].status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bookings[0].total)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bookings[0].deposit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bookings[0].Therapist)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bookings[0].Service)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bookings[0].Slot)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bookings[0].Customer)
+            </th>
+		</tr>
+   </thead>
+   <tbody>
+        @foreach (var item in Model.Bookings)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.appointmentDay)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.total)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.deposit)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Therapist.fullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Service.description)
+                </td>
+                <td>
+                    @item.Slot.startTime.ToString("hh\\:mm") - @item.Slot.endTime.ToString("hh\\:mm")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customer.address)
+                </td>
+            </tr>
+        }
+   </tbody>
+   }
+    else
+    {
+    <p>No bookings available.</p>
+    }
+</table>

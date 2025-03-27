@@ -24,14 +24,14 @@ namespace PRN_Final_Project.Pages.SlotPage
         [BindProperty]
         public SlotServiceModel Slot { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(Guid? id)
+        public async Task<IActionResult> OnGetAsync(Guid id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var slot = await slotService.GetSlotAsyncById(id.ToString());
+            var slot = await slotService.GetSlotAsyncById(id);
 
             if (slot == null)
             {
@@ -44,14 +44,14 @@ namespace PRN_Final_Project.Pages.SlotPage
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(Guid? id)
+        public async Task<IActionResult> OnPostAsync(Guid id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            await slotService.DeleteSlot(id.ToString());
+            await slotService.DeleteSlot(id);
 
             return RedirectToPage("./Index");
         }

@@ -120,7 +120,6 @@ namespace Services.Services
         public async Task AddBooking(CreateBookingModel model)
         {
             Booking booking=mapper.Map<Booking>(model);
-            booking.BookingID = Guid.NewGuid();
             try
             {
                 _unitOfWork.BeginTransaction();
@@ -153,12 +152,6 @@ namespace Services.Services
                 Console.WriteLine(ex.Message);
             }
             await _unitOfWork.SaveAsync();
-        }
-
-
-        public BookingService(IUnitOfWork unitOfWord)
-        {
-            _unitOfWork = unitOfWord;
         }
 
         public class BookingsResponse
@@ -275,6 +268,15 @@ namespace Services.Services
 
 
         }
-
+        public async Task<IList<Booking>> GetAll()
+        {
+            var bookings = await _unitOfWork.GetRepository<Booking>().Entities
+                .Include(b => b.Customer)
+                .Include(b => b.Service)
+                .Include(b => b.Slot)
+                .Include(b => b.Therapist).ToListAsync();
+            return bookings
+            ;
+        }
     }
 }

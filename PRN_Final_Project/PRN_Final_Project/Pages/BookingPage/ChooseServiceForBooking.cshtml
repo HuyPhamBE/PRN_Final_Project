@@ -1,0 +1,12 @@
+﻿@page
+@model PRN_Final_Project.Pages.BookingPage.ChooseServiceForBookingModel
+
+<h2>Choose a Service for Your Booking</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label>Select a Service</label>
+        <select asp-for="SelectedServiceID" asp-items="@( (SelectList)ViewData["serviceID"] )" class="form-control"></select>
+    </div>
+    <button type="submit" class="btn btn-primary">Confirm Service</button>
+</form>

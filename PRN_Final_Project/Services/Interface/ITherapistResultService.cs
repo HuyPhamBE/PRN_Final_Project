@@ -18,5 +18,8 @@ namespace Services.Interface
         Task UpdateTherapyResult(TherapyResult therapyResult);
 
         Task ToggleTherapyResultStatus(Guid id);  // soft delete
+
+        Task<IList<TherapyResult>> GetAllById(Guid therapyResultId);
+
     }
 }

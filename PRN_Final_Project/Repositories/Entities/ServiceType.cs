@@ -11,6 +11,6 @@ namespace Repositories.Entities
         public int maxRage { get; set; }
         public string status { get; set; }
         public decimal price { get; set; }
-        public ICollection<Evaluation> Services { get; set; }
+        public virtual ICollection<Evaluation> Services { get; set; }
     }
 }

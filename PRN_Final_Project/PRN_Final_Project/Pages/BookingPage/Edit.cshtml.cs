@@ -8,38 +8,68 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Repositories.DB;
 using Repositories.Entities;
+using Services.Interface;
+using Services.Services;
 
 namespace PRN_Final_Project.Pages.BookingPage
 {
     public class EditModel : PageModel
     {
         private readonly Repositories.DB.ApplicationDbContext _context;
+        private readonly IBookingService bookingService;
+        private readonly ISlotService slotService;
+        private readonly ITherapistService therapistService;
+        private readonly IServiceService serviceService;
 
-        public EditModel(Repositories.DB.ApplicationDbContext context)
+        public EditModel(Repositories.DB.ApplicationDbContext context,
+            IBookingService bookingService,
+            ISlotService slotService,
+            ITherapistService therapistService,
+            IServiceService serviceService)
         {
             _context = context;
+            this.bookingService = bookingService;
+            this.slotService = slotService;
+            this.therapistService = therapistService;
+            this.serviceService = serviceService;
         }
 
         [BindProperty]
         public Booking Booking { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(Guid? id)
+        public async Task<IActionResult> OnGetAsync(Guid id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var booking =  await _context.Bookings.FirstOrDefaultAsync(m => m.BookingID == id);
+            var booking = await bookingService.GetBookingByID(id);
             if (booking == null)
             {
                 return NotFound();
             }
             Booking = booking;
-           ViewData["cusID"] = new SelectList(_context.Customers, "cusID", "address");
-           ViewData["serviceID"] = new SelectList(_context.Services, "ServiceID", "description");
-           ViewData["slotID"] = new SelectList(_context.Slots, "SlotID", "SlotID");
-           ViewData["theraID"] = new SelectList(_context.Therapists, "theraID", "fullName");
+            // service options
+            var services = await serviceService.GetServiceAsync();
+            var serviceListItem= services.Select(s => new SelectListItem
+            {
+                Value = s.ServiceID.ToString(),
+                Text = s.description
+            }).ToList();
+            ViewData["serviceID"] = serviceListItem;
+            //slot options
+            var slots = await slotService.GetSlotAsync();
+            var slotSelectListItems = slots.Select(s => new SelectListItem
+            {
+                Value = s.SlotID.ToString(),
+                Text = $"{s.startTime.ToString(@"hh\:mm")}-{s.endTime.ToString(@"hh\:mm")}"
+            }).ToList();
+
+            ViewData["slotID"] = new SelectList(slotSelectListItems, "Value", "Text");
+            // therapist option
+            var therapists = await therapistService.GetAllTherapistsAsync();
+            ViewData["theraID"] = new SelectList(therapists, "theraID", "fullName");
             return Page();
         }
 
@@ -52,30 +82,9 @@ namespace PRN_Final_Project.Pages.BookingPage
                 return Page();
             }
 
-            _context.Attach(Booking).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BookingExists(Booking.BookingID))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+           await bookingService.UpdateBooking(Booking);
 
             return RedirectToPage("./Index");
-        }
-
-        private bool BookingExists(Guid id)
-        {
-            return _context.Bookings.Any(e => e.BookingID == id);
         }
     }
 }

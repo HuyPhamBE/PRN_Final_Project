@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using Repositories.DB;
 using Repositories.Entities;
 using Repositories.Model.Booking;
@@ -24,23 +25,19 @@ namespace PRN_Final_Project.Pages.BookingPage
         public CreateModel(IHttpContextAccessor httpContextAccessor,
             IBookingService bookingService,
             ICustomerService customerService,
-            IServiceService serviceService,
             ISlotService slotService,
             ITherapistService therapistService)
         {
             this.httpContextAccessor = httpContextAccessor;
             this.bookingService = bookingService;
-            this.customerService = customerService;
-            this.serviceService = serviceService;
+            this.customerService = customerService;            
             this.slotService = slotService;
             this.therapistService = therapistService;
         }
 
         public async Task<IActionResult> OnGet()
         {
-            //service option
-            var services = await serviceService.GetServiceAsync();
-            ViewData["serviceID"] = new SelectList(services, "ServiceID", "description");
+
             //slot options
             var slots = await slotService.GetSlotAsync();
             var slotSelectListItems = slots.Select(s => new SelectListItem
@@ -62,12 +59,13 @@ namespace PRN_Final_Project.Pages.BookingPage
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            var userIdString = httpContextAccessor.HttpContext.Request.Cookies["UserId"];
+            var userIdString = HttpContext.Session.GetString("UserId");
             var cusid = await customerService.GetCustomerByUserId(Guid.Parse(userIdString));
-           BookingModel.cusID = cusid.cusID;
-           await bookingService.AddBooking(BookingModel);
+            BookingModel.cusID = cusid.cusID;
+            BookingModel.status = "Not Completed";
+            TempData["BookingData"] = JsonConvert.SerializeObject(BookingModel);
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("/BookingPage/ChooseServiceForBooking");
         }
     }
 }

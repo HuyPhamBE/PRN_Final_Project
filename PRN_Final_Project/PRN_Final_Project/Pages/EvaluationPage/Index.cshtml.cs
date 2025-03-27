@@ -25,7 +25,7 @@ namespace PRN_Final_Project.Pages.EvaluationPage
 
         public async Task OnGetAsync()
         {
-        Evaluation=await evaluationService.GetEvaluationAsync();
+            Evaluation = await evaluationService.GetEvaluationsAsync();
         }
     }
 }

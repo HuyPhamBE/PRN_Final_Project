@@ -36,7 +36,8 @@ namespace PRN_Final_Project.Pages.CustomerManage
             {
                 return Page();
             }
-
+            Customer.cusID=Guid.Parse(HttpContext.Session.GetString("UserID"));
+            Customer.fullName = HttpContext.Session.GetString("UserName");
             await _customerService.CreateCustomer(Customer);
 
             return RedirectToPage("./Index");

@@ -35,10 +35,10 @@ namespace Services.Services
             await unitOfWork.SaveAsync();
         }
 
-        public async Task<IList<EvaluationServiceModel>> GetEvaluationAsync()
+        public async Task<IList<EvaluationServiceModel>> GetEvaluationsAsync()
         {
-            var evaluations = await unitOfWork.GetRepository<Evaluation>().GetAllAsync();
-            return mapper.Map<IList<EvaluationServiceModel>>(evaluations);
+            var evaluation=await unitOfWork.GetRepository<Evaluation>().GetAllAsync();
+            return mapper.Map<IList<EvaluationServiceModel>>(evaluation);
         }
 
         public async Task<EvaluationServiceModel> GetEvaluationAsyncById(string id)

@@ -1,0 +1,22 @@
+﻿@page
+@model PRN_Final_Project.Pages.PaymentPage.PaymentPageModel
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    var userName = HttpContext.Session.GetString("UserName");
+    double depositDb = (double)Model.deposit;
+}
+@if (Model.BookingModel != null)
+{
+    <p>Customer: @userName</p>
+    <p>Service : @Model.description</p>
+    <p>Total: @Model.BookingModel.total</p>
+    <p>Deposit required: @Model.deposit</p>
+}
+    <form method="post" asp-page-handler="CreatePaymentUrlVnpay">
+        <input type="hidden" name="Name" value="@userName" />
+        <input type="hidden" name="Amount" value="@depositDb" />
+        <input type="hidden" name="OrderDescription" value="Thanh toán qua VnPay" />
+        <input type="hidden" name="OrderType" value="270000" />
+
+        <button class="btn" type="submit">Pay with VNPay</button>
+</form>
