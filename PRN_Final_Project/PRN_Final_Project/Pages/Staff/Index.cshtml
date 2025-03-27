@@ -114,8 +114,21 @@
                                     }
                                 </td>
                                 <td>
+                                    @{
+                                        // Get the Vietnam time zone.
+                                        // On Windows, the ID is "SE Asia Standard Time"; on Linux, it might be "Asia/Ho_Chi_Minh".
+                                        var vietnamTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+
+                                        // Convert current UTC time to Vietnam time.
+                                        var currentVietnamTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, vietnamTimeZone);
+
+                                        // Convert the appointmentDay to Vietnam time.
+                                        var appointmentVietnamDate = TimeZoneInfo.ConvertTimeFromUtc(item.appointmentDay.ToUniversalTime(), vietnamTimeZone).Date;
+                                        var currentVietnamDate = currentVietnamTime.Date;
+                                    }
+
                                     <div class="btn-group" role="group">
-                                        @if (item.status == "pending" && item.appointmentDay.Date == DateTime.Today && item.appointmentDay.TimeOfDay <= DateTime.Now.TimeOfDay)
+                                        @if (item.status == "pending" && appointmentVietnamDate == currentVietnamDate && item.Slot.startTime <= currentVietnamTime.TimeOfDay)
                                         {
                                             <form method="post" asp-page-handler="CheckIn" asp-route-id="@item.BookingID" class="check-in-form">
                                                 <button type="submit" class="btn btn-success btn-sm">
@@ -242,18 +255,18 @@
         @if (TempData["Success"] != null)
         {
             <text>
-                    $(document).ready(function() {
-                        showAlert('success', 'Success', '@TempData["Success"]');
-                    });
+                        $(document).ready(function() {
+                            showAlert('success', 'Success', '@TempData["Success"]');
+                        });
             </text>
         }
 
         @if (TempData["Error"] != null)
         {
             <text>
-                    $(document).ready(function() {
-                        showAlert('error', 'Error', '@TempData["Error"]');
-                    });
+                        $(document).ready(function() {
+                            showAlert('error', 'Error', '@TempData["Error"]');
+                        });
             </text>
         }
 
