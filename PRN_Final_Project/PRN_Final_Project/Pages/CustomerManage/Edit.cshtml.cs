@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -18,7 +19,7 @@ namespace PRN_Final_Project.Pages.CustomerManage
 {
     public class EditModel : PageModel
     {
-        private readonly ICustomerService _customerService;
+        private readonly ICustomerService _customerService;        
 
         public EditModel(ICustomerService customerService)
         { 
@@ -37,6 +38,7 @@ namespace PRN_Final_Project.Pages.CustomerManage
             var accID = HttpContext.Session.GetString("UserId");
             var cus = await _customerService.GetCustomerByUserId(Guid.Parse(accID));
             Customer.accountID = Guid.Parse(accID);
+            Customer.cusId = cus.cusID;
             await _customerService.UpdateCustomer(Customer, cus.cusID);
             return RedirectToPage("/CustomerManage/Profile");
         }

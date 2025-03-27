@@ -83,8 +83,7 @@ namespace Services.Services
             var customer = await _unitOfWork.GetRepository<Customer>()
                 .Entities
                 .FirstOrDefaultAsync(c => c.cusID == id);
-            customer = _mapper.Map<Customer>(model);
-                await _unitOfWork.GetRepository<Customer>().UpdateAsync(customer);
+            _mapper.Map(model, customer);
             await _unitOfWork.SaveAsync();
         }     
 
