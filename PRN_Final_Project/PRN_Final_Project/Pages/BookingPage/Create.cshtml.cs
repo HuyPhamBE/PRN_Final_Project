@@ -63,9 +63,18 @@ namespace PRN_Final_Project.Pages.BookingPage
             var cusid = await customerService.GetCustomerByUserId(Guid.Parse(userIdString));
             BookingModel.cusID = cusid.cusID;
             BookingModel.status = "Not Completed";
+            bool availableSlot=await bookingService.IsTherapistAvailableAsync(BookingModel.theraID, BookingModel.appointmentDay, BookingModel.slotID);
+            if (availableSlot==true)
+            {
             TempData["BookingData"] = JsonConvert.SerializeObject(BookingModel);
 
             return RedirectToPage("/BookingPage/ChooseServiceForBooking");
+            }
+            else
+            {
+                TempData["Notification"] = "Therapist is not available at this time. Please choose another time.";
+                return RedirectToPage("/BookingPage/Create");
+            }
         }
     }
 }

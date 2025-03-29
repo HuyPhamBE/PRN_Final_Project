@@ -39,9 +39,9 @@
                 @Html.DisplayFor(modelItem => item.accountID)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.evaID">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.evaID">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.evaID">Delete</a>
+                    <a asp-page="./Edit" class="btn btn-warning btn-sm" asp-route-id="@item.evaID">Edit</a> |
+                    <a asp-page="./Details" class="btn btn-info btn-sm" asp-route-id="@item.evaID">Details</a> |
+                    <a asp-page="./Delete" class="btn btn-danger btn-sm" asp-route-id="@item.evaID">Delete</a>
             </td>
         </tr>
 }

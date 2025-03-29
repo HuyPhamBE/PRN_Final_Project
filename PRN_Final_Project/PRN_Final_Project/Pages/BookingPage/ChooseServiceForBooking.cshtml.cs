@@ -65,9 +65,9 @@ namespace PRN_Final_Project.Pages.BookingPage
             BookingModel.serviceID = SelectedServiceID;
 
             BookingModel.total = (await serviceService.GetServiceAsyncById(SelectedServiceID)).price;
+            BookingModel.deposit = BookingModel.total / 2m;
             TempData["BookingData"] = JsonConvert.SerializeObject(BookingModel);
-            // Now add the booking record to the database with the complete information
-            // (assuming bookingService.AddBooking handles the new booking correctly)
+            
             await bookingService.AddBooking(BookingModel);
 
             // Redirect to a confirmation or booking list page

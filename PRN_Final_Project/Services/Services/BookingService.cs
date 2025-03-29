@@ -200,7 +200,7 @@ namespace Services.Services
             };
         }
 
-        public async Task<bool> IsTherapistAvailableAsync(Guid therapistId, DateTime appointmentDay, Guid slotId)
+        public async Task<bool> IsTherapistAvailableAsync(Guid? therapistId, DateTime appointmentDay, Guid slotId)
         {
             var repo = _unitOfWork.GetRepository<Booking>();
 
@@ -213,8 +213,6 @@ namespace Services.Services
             // Return true if no bookings found (therapist is available)
             return !existingBooking;
         }
-
-
         public async Task<Booking> GetBookingByID(Guid id)
         {
             var repo = _unitOfWork.GetRepository<Booking>();

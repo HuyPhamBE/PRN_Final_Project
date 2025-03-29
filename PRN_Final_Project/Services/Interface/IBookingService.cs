@@ -29,7 +29,7 @@ namespace Services.Interface
         Task UpdateBooking(UpdateBookingModel model, string id);
         Task<BookingsResponse> GetAllBookings(string searchTerm, int pageIndex, int pageSize);
 
-        Task<bool> IsTherapistAvailableAsync(Guid therapistId, DateTime appointmentDay, Guid slotId);
+        Task<bool> IsTherapistAvailableAsync(Guid? therapistId, DateTime appointmentDay, Guid slotId);
 
         Task<Booking> GetBookingByID(Guid id);
 

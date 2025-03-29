@@ -9,16 +9,16 @@
        <thead>
 	   <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Bookings[0].appointmentDay)
+                Appointment Day
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Bookings[0].status)
+                Status
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Bookings[0].total)
+               Total
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Bookings[0].deposit)
+                Deposit
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Bookings[0].Therapist)
@@ -30,7 +30,7 @@
                 @Html.DisplayNameFor(model => model.Bookings[0].Slot)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Bookings[0].Customer)
+                Address
             </th>
 		</tr>
    </thead>
@@ -39,7 +39,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.appointmentDay)
+                        @item.appointmentDay.ToShortDateString()
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.status)

@@ -17,14 +17,17 @@ namespace PRN_Final_Project.Pages.PaymentPage
         private readonly IVnPayService vnPayService;
         private readonly IPaymentService paymentService;
         private readonly IUnitOfWork unitOfWork;
+        private readonly IBookingService bookingService;
 
         public PaymentCallBackModel(IVnPayService vnPayService,
             IPaymentService paymentService,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IBookingService bookingService)
         {
             this.vnPayService = vnPayService;
             this.paymentService = paymentService;
             this.unitOfWork = unitOfWork;
+            this.bookingService = bookingService;
         }
         public CreateBookingModel BookingModel { get; set; }
         public decimal deposit { get; set; }
@@ -90,6 +93,9 @@ namespace PRN_Final_Project.Pages.PaymentPage
                 bookingID = BookingModel.BookingID
             };
             await paymentService.AddPayment(PaymentDetails);
+            var booking= await bookingService.GetById(BookingModel.BookingID);
+            booking.status = "Paid";
+            await bookingService.UpdateBooking(booking);
             return RedirectToPage("/BookingPage/BookingHistory");
         }
     }
