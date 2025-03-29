@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "{id}"
 @model PRN_Final_Project.Pages.CustomerManage.EditModel
 @inject Services.Interface.ICustomerService CustomerService
 @{
@@ -56,5 +56,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

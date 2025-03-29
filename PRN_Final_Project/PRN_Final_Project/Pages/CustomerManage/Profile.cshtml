@@ -4,54 +4,63 @@
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Pages/Shared/_Layout.cshtml";
-    var customerId = Model.Customer.cusID;
+    var customerId = Model.Customer?.cusID;
 }
 
 <h1>Details</h1>
 
-<div>
-    <h4>Customer</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Customer.fullName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Customer.fullName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Customer.phone)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Customer.phone)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Customer.address)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Customer.address)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Customer.dob)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Customer.dob)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Customer.gender)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Customer.gender)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Customer.imageUrl)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Customer.imageUrl)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a class="btn" asp-page="./Edit" asp-route-id="@customerId">Edit</a> |
-    <a asp-page="/HomePage">Back to HomePage</a>
-</div>
+@if (Model.Customer == null)
+{
+    <div class="alert alert-warning">
+        Customer not found.
+    </div>
+}
+else
+{
+    <div>
+        <h4>Customer</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Customer.fullName)
+            </dt>
+            <dd class="col-sm-10">
+                @(Model.Customer.fullName ?? "N/A")
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Customer.phone)
+            </dt>
+            <dd class="col-sm-10">
+                @(Model.Customer.phone ?? "N/A")
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Customer.address)
+            </dt>
+            <dd class="col-sm-10">
+                @(Model.Customer.address ?? "N/A")
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Customer.dob)
+            </dt>
+            <dd class="col-sm-10">
+                @(Model.Customer.dob.ToString("yyyy-MM-dd") ?? "N/A")
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Customer.gender)
+            </dt>
+            <dd class="col-sm-10">
+                @((bool) Model.Customer.gender ? "Male" : "Female")
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Customer.imageUrl)
+            </dt>
+            <dd class="col-sm-10">
+                @(Model.Customer.imageUrl ?? "N/A")
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a class="btn" asp-page="./Edit" asp-route-id="@customerId">Edit</a> |
+        <a asp-page="/HomePage">Back to HomePage</a>
+    </div>
+}
